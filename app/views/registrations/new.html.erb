@@ -1,0 +1,39 @@
+<div class="max-w-md mx-auto border border-gray-200 p-8">
+  <h1 class="text-3xl font-bold mb-8 text-center">Sign Up</h1>
+
+  <%= form_with(model: @user, url: registration_path, class: "space-y-6") do |f| %>
+    <% if @user.errors.any? %>
+      <div class="p-4 border border-red-500 text-red-700 bg-red-50 mb-6 text-sm">
+        <strong><%= pluralize(@user.errors.count, "error") %>:</strong>
+        <ul class="list-disc ml-5 mt-2">
+          <% @user.errors.full_messages.each do |msg| %>
+            <li><%= msg %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+
+    <div>
+      <%= f.label :email_address, "Email", class: "block font-bold mb-2" %>
+      <%= f.email_field :email_address, class: "w-full border border-gray-300 p-3 focus:outline-none focus:border-black", required: true %>
+    </div>
+
+    <div>
+      <%= f.label :password, class: "block font-bold mb-2" %>
+      <%= f.password_field :password, class: "w-full border border-gray-300 p-3 focus:outline-none focus:border-black", required: true %>
+    </div>
+
+    <div>
+      <%= f.label :password_confirmation, "Confirm Password", class: "block font-bold mb-2" %>
+      <%= f.password_field :password_confirmation, class: "w-full border border-gray-300 p-3 focus:outline-none focus:border-black", required: true %>
+    </div>
+
+    <div class="pt-4">
+      <%= f.submit "Create Account", class: "w-full border border-black px-8 py-3 font-bold cursor-pointer hover:bg-black hover:text-white transition-colors" %>
+    </div>
+  <% end %>
+
+  <p class="mt-6 text-center text-sm text-gray-500">
+    Already have an account? <%= link_to "Login", new_session_path, class: "underline" %>
+  </p>
+</div>

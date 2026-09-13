@@ -1,0 +1,96 @@
+<div class="max-w-5xl mx-auto flex flex-col md:flex-row gap-10">
+  <!-- Left Side: Image and Basic Info -->
+  <div class="md:w-1/3 flex flex-col space-y-4">
+    <% if @anime.image.attached? %>
+      <%= image_tag @anime.image, class: "w-full border border-gray-200" %>
+    <% else %>
+      <div class="bg-gray-100 aspect-[3/4] flex items-center justify-center border border-gray-200">No Image</div>
+    <% end %>
+
+    <div class="pt-4 border-t border-gray-200">
+      <h3 class="text-sm uppercase tracking-wider text-gray-500 mb-2">Current Score</h3>
+      <div class="text-2xl font-bold"><%= @anime.score || 0 %></div>
+    </div>
+
+    <!-- Voting Section for logged in users -->
+    <div class="pt-4 border-t border-gray-200">
+      <% if Current.user %>
+        <% if @vote %>
+          <div class="mb-2 text-sm text-gray-600">You voted: <%= @vote.value > 0 ? '+1' : '-1' %></div>
+          <%= button_to "Remove Vote", anime_vote_path(@anime, @vote), method: :delete, class: "w-full border border-black px-4 py-2 hover:bg-black hover:text-white transition-colors" %>
+        <% else %>
+          <div class="flex gap-4">
+            <%= button_to "+1 Upvote", anime_votes_path(@anime, score: 1), method: :post, class: "w-1/2 border border-black px-4 py-2 hover:bg-black hover:text-white transition-colors" %>
+            <%= button_to "-1 Downvote", anime_votes_path(@anime, score: -1), method: :post, class: "w-1/2 border border-black px-4 py-2 hover:bg-black hover:text-white transition-colors" %>
+          </div>
+        <% end %>
+      <% else %>
+        <p class="text-sm text-gray-500"><%= link_to "Login to vote", new_session_path, class: "underline" %></p>
+      <% end %>
+    </div>
+
+    <!-- Delete option for Admin -->
+    <% if Current.user&.admin? %>
+      <div class="pt-8 text-center border-t border-gray-200 text-sm">
+        <%= button_to "Delete Anime (Admin)", anime_path(@anime), method: :delete, data: { turbo_confirm: "Are you sure?" }, class: "text-red-600 hover:underline" %>
+      </div>
+    <% end %>
+  </div>
+
+  <!-- Right Side: Details, Trailer, Comments -->
+  <div class="md:w-2/3 flex flex-col space-y-10">
+    <div>
+      <h1 class="text-4xl font-black tracking-tight"><%= @anime.title %></h1>
+    </div>
+
+    <!-- Trailer -->
+    <% if @anime.trailer_url.present? %>
+      <div class="border border-gray-200 p-1">
+        <div class="aspect-video">
+          <iframe 
+            src="<%= @anime.trailer_url.gsub("watch?v=", "embed/") %>" 
+            title="YouTube video player" 
+            frameborder="0" 
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+            allowfullscreen
+            class="w-full h-full">
+          </iframe>
+        </div>
+      </div>
+    <% end %>
+
+    <!-- Comments -->
+    <div class="border-t border-gray-200 pt-8">
+      <h2 class="text-2xl font-bold mb-6">Comments</h2>
+      
+      <% if Current.user %>
+        <%= form_with(model: [@anime, Comment.new], class: "mb-8 flex flex-col items-end") do |f| %>
+          <%= f.text_area :content, rows: 3, class: "w-full border border-gray-300 p-3 mb-2 focus:outline-none focus:border-black", placeholder: "Share your thoughts..." %>
+          <%= f.submit "Post Comment", class: "border border-black px-6 py-2 cursor-pointer hover:bg-black hover:text-white transition-colors" %>
+        <% end %>
+      <% else %>
+        <p class="mb-8 text-gray-500"><%= link_to "Login", new_session_path, class: "underline" %> to add a comment.</p>
+      <% end %>
+
+      <div class="space-y-6">
+        <% @comments.each do |comment| %>
+          <div class="border-b border-gray-100 pb-4">
+            <div class="flex justify-between items-center mb-1">
+              <span class="font-bold text-sm"><%= comment.user.email_address.split('@').first %></span>
+              <span class="text-xs text-gray-400"><%= time_ago_in_words(comment.created_at) %> ago</span>
+            </div>
+            <p class="text-gray-800"><%= comment.content %></p>
+            <% if Current.user == comment.user || Current.user&.admin? %>
+              <div class="mt-2 text-right">
+                <%= button_to "Delete", anime_comment_path(@anime, comment), method: :delete, data: { turbo_confirm: "Delete comment?" }, class: "text-xs text-red-500 hover:underline" %>
+              </div>
+            <% end %>
+          </div>
+        <% end %>
+        <% if @comments.empty? %>
+          <p class="text-gray-400 text-sm">No comments yet.</p>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,11 @@
+bin/rails aborted!
+ActiveRecord::DatabaseConnectionError: There is an issue connecting with your hostname: pg-ea3e449-uchillohit-d448.h.aivencloud.com. (ActiveRecord::DatabaseConnectionError)
+
+Please check your database configuration and ensure there is a valid connection to your database.
+
+
+Caused by:
+PG::ConnectionBad: could not translate host name "pg-ea3e449-uchillohit-d448.h.aivencloud.com" to address: Name or service not known (PG::ConnectionBad)
+
+Tasks: TOP => db:migrate
+(See full trace by running task with --trace)

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= content_for(:title) || "Anime Voting App" %></title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+    <%= yield :head %>
+    <link rel="icon" href="/icon.png" type="image/png">
+    <link rel="icon" href="/icon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="/icon.png">
+    <%= stylesheet_link_tag "tailwind", "data-turbo-track": "reload" %>
+    <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
+    <%= javascript_importmap_tags %>
+  </head>
+
+  <body class="bg-white text-black font-sans antialiased">
+    <nav class="border-b border-gray-200">
+      <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+        <%= link_to "Anime Tracker", root_path, class: "text-xl font-bold tracking-tight" %>
+        <div class="flex space-x-6">
+          <%= link_to "Catalog", root_path, class: "hover:underline" %>
+          <% if Current.user %>
+            <%= link_to "Add Anime", new_anime_path, class: "hover:underline" %>
+            <%= button_to "Log out", session_path, method: :delete, class: "hover:underline" %>
+          <% else %>
+            <%= link_to "Login", new_session_path, class: "hover:underline" %>
+            <%= link_to "Sign Up", new_registration_path, class: "hover:underline" %>
+          <% end %>
+        </div>
+      </div>
+    </nav>
+    <main class="container mx-auto mt-10 px-4">
+      <% if notice %>
+        <div class="mb-4p-4 border border-gray-300 text-sm"><%= notice %></div>
+      <% end %>
+      <% if alert %>
+        <div class="mb-4 p-4 border border-gray-300 text-sm font-bold"><%= alert %></div>
+      <% end %>
+      <%= yield %>
+    </main>
+  </body>
+</html>
