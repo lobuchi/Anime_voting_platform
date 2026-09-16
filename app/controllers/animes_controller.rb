@@ -46,6 +46,7 @@ class AnimesController < ApplicationController
   end
 
   def anime_params
-    params.require(:anime).permit(:title, :image, :trailer_url)
+    # Added :description to the permitted attributes list
+    params.require(:anime).permit(:title, :description, :image, :trailer_url)
   end
 end
