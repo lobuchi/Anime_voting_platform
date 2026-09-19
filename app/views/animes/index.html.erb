@@ -8,8 +8,8 @@
             #<%= index + 1 %>
           </div>
           <div class="w-24 h-32 shrink-0 border border-gray-100 overflow-hidden">
-            <% if anime.image.attached? %>
-              <%= image_tag anime.image, class: "w-full h-full object-cover" %>
+            <% if anime.image_data.present? %>
+              <%= image_tag anime.image_data, class: "w-full h-full object-cover" %>
             <% else %>
               <div class="bg-gray-100 w-full h-full flex items-center justify-center text-xs text-gray-400">No Image</div>
             <% end %>
