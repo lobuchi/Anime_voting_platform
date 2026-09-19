@@ -1,6 +1,6 @@
 <div class="max-w-2xl mx-auto border border-gray-200 p-8">
   <h1 class="text-3xl font-bold mb-8 text-center">Add Anime</h1>
-  
+
   <%= form_with(model: @anime, class: "space-y-6") do |f| %>
     <% if @anime.errors.any? %>
       <div class="p-4 border border-red-500 text-red-700 bg-red-50 mb-6 font-mono text-sm">
@@ -18,15 +18,14 @@
       <%= f.text_field :title, class: "w-full border border-gray-300 p-3 focus:outline-none focus:border-black" %>
     </div>
 
-    <!-- Added Description Field -->
     <div>
       <%= f.label :description, class: "block font-bold mb-2" %>
       <%= f.text_area :description, rows: 4, class: "w-full border border-gray-300 p-3 focus:outline-none focus:border-black", placeholder: "Enter a brief summary of the anime..." %>
     </div>
 
     <div>
-      <%= f.label :image, "Upload Image", class: "block font-bold mb-2" %>
-      <%= f.file_field :image, accept: "image/*", class: "w-full border border-gray-300 p-3 focus:outline-none focus:border-black" %>
+      <%= f.label :image_file, "Upload Image (Max 10KB)", class: "block font-bold mb-2" %>
+      <%= f.file_field :image_file, accept: "image/*", class: "w-full border border-gray-300 p-3 focus:outline-none focus:border-black" %>
     </div>
 
     <div>
