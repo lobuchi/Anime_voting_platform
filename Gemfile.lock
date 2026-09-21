@@ -148,7 +148,7 @@ GEM
       actionview (>= 7.0.0)
       activesupport (>= 7.0.0)
     jmespath (1.6.2)
-    json (2.7.2)
+    json (3.0.2)
     kamal (2.12.0)
       activesupport (>= 7.0)
       base64 (~> 0.2)
@@ -390,7 +390,7 @@ DEPENDENCIES
   dotenv-rails
   importmap-rails
   jbuilder
-  json (= 2.7.2)
+  json (= 3.0.2)
   kamal
   pg
   propshaft
