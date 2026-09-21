@@ -1,6 +1,7 @@
 source "https://rubygems.org"
 
-
+gem "cloudinary"
+gem "activestorage-cloudinary-service"
 
 gem "pg"
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
