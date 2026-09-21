@@ -2,8 +2,15 @@ test:
   service: Disk
   root: <%= Rails.root.join("tmp/storage") %>
 
-cloudinary:
-  service: Cloudinary
+
+supabase:
+  service: S3
+  access_key_id: <%= ENV['SUPABASE_ACCESS_KEY_ID'] %>
+  secret_access_key: <%= ENV['SUPABASE_SECRET_ACCESS_KEY'] %>
+  region: <%= ENV['SUPABASE_REGION'] %>
+  bucket: <%= ENV['SUPABASE_BUCKET'] %>
+  endpoint: <%= ENV['SUPABASE_ENDPOINT'] %>
+  force_path_style: true
 
 local:
   service: Disk

@@ -1,7 +1,6 @@
 source "https://rubygems.org"
 
-gem "cloudinary"
-gem "activestorage-cloudinary-service"
+gem "aws-sdk-s3", require: false
 
 gem "pg"
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
