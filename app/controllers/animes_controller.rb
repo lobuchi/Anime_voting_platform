@@ -47,6 +47,13 @@ class AnimesController < ApplicationController
 
   def anime_params
   # Changed :image to :image_file
-      params.require(:anime).permit(:title, :description, :image_file, :trailer_url)
+      params.require(:anime).permit(:title, :description, :image, :trailer_url)
+  end
+
+
+  def image_size
+    if image.attached? && image.blob.byte_size > 1.megabyte
+      errors.add(:image, "must be less than 1MB")
+    end
   end
 end
