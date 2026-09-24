@@ -46,8 +46,7 @@ class AnimesController < ApplicationController
   end
 
   def anime_params
-  # Changed :image to :image_file
-      params.require(:anime).permit(:title, :description, :image, :trailer_url)
+    # Base64 storage — accepts the virtual :image_file attribute
+    params.require(:anime).permit(:title, :description, :image_file, :trailer_url)
   end
-
 end
