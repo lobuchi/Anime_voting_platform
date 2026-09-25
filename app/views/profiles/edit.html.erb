@@ -1,0 +1,37 @@
+<div class="max-w-2xl mx-auto border border-gray-200 p-8">
+  <h1 class="text-3xl font-bold mb-8 text-center">Edit Profile</h1>
+
+  <%= form_with model: @user, url: profile_path, method: :patch, class: "space-y-6" do |f| %>
+    <%= render "shared/errors", object: @user %>
+
+    <div class="flex items-center gap-6">
+      <div class="w-24 h-24 shrink-0 border border-gray-200 overflow-hidden flex items-center justify-center bg-gray-100">
+        <% if @user.avatar_data.present? %>
+          <%= image_tag @user.avatar_data, class: "w-full h-full object-cover" %>
+        <% else %>
+          <span class="text-3xl font-bold text-gray-400"><%= @user.initial %></span>
+        <% end %>
+      </div>
+      <div class="flex-grow">
+        <%= f.label :avatar_file, "Avatar (Max 500KB)", class: "block font-bold mb-2" %>
+        <%= f.file_field :avatar_file, accept: "image/*", class: "w-full border border-gray-300 p-3" %>
+      </div>
+    </div>
+
+    <% %i[username display_name bio].each do |field| %>
+      <div>
+        <%= f.label field, class: "block font-bold mb-2" %>
+        <% if field == :bio %>
+          <%= f.text_area field, rows: 4, class: "w-full border border-gray-300 p-3" %>
+        <% else %>
+          <%= f.text_field field, class: "w-full border border-gray-300 p-3" %>
+        <% end %>
+      </div>
+    <% end %>
+
+    <div class="pt-4 flex justify-between items-center">
+      <%= link_to "Cancel", @user, class: "hover:underline text-gray-500" %>
+      <%= f.submit "Save Profile", class: "border border-black px-8 py-3 font-bold cursor-pointer hover:bg-black hover:text-white" %>
+    </div>
+  <% end %>
+</div>

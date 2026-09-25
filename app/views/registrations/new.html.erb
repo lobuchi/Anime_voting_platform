@@ -19,6 +19,17 @@
     </div>
 
     <div>
+      <%= f.label :username, "Username", class: "block font-bold mb-2" %>
+      <%= f.text_field :username, class: "w-full border border-gray-300 p-3 focus:outline-none focus:border-black", placeholder: "Letters, numbers, and underscores", required: true %>
+      <p class="text-xs text-gray-500 mt-1">3–20 characters. Letters, numbers, and underscores only.</p>
+    </div>
+
+    <div>
+      <%= f.label :display_name, "Display Name (optional)", class: "block font-bold mb-2" %>
+      <%= f.text_field :display_name, class: "w-full border border-gray-300 p-3 focus:outline-none focus:border-black" %>
+    </div>
+
+    <div>
       <%= f.label :password, class: "block font-bold mb-2" %>
       <%= f.password_field :password, class: "w-full border border-gray-300 p-3 focus:outline-none focus:border-black", required: true %>
     </div>

@@ -1,0 +1,16 @@
+<%= link_to vote.anime, class: "flex items-center gap-4 p-3 border border-gray-200 hover:border-black transition-colors" do %>
+  <div class="w-12 h-16 shrink-0 border border-gray-100 overflow-hidden">
+    <% if vote.anime.image_data.present? %>
+      <%= image_tag vote.anime.image_data, class: "w-full h-full object-cover" %>
+    <% else %>
+      <div class="bg-gray-100 w-full h-full"></div>
+    <% end %>
+  </div>
+  <div class="flex-grow">
+    <div class="font-bold"><%= vote.anime.title %></div>
+    <div class="text-xs text-gray-500"><%= time_ago_in_words(vote.created_at) %> ago</div>
+  </div>
+  <div class="<%= vote.value.positive? ? 'text-green-600' : 'text-red-600' %> font-bold">
+    <%= vote.value.positive? ? "+1" : "-1" %>
+  </div>
+<% end %>

@@ -1,0 +1,7 @@
+<div class="border border-gray-200 p-4">
+  <div class="text-xs text-gray-500 mb-2">
+    on <%= link_to comment.anime.title, comment.anime, class: "underline hover:text-black" %>
+    · <%= time_ago_in_words(comment.created_at) %> ago
+  </div>
+  <p class="text-gray-800"><%= comment.content %></p>
+</div>

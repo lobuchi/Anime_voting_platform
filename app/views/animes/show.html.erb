@@ -114,7 +114,7 @@
         <% @comments.each do |comment| %>
           <div style="border-bottom: 1px solid #f3f4f6; padding-bottom: 1rem;">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.25rem;">
-              <span style="font-weight: 700; font-size: 0.875rem;"><%= comment.user.email_address.split('@').first %></span>
+              <%= link_to comment.user.name, comment.user, style: "font-weight: 700; font-size: 0.875rem; text-decoration: none; color: inherit;" %>
               <span style="font-size: 0.75rem; color: #9ca3af;"><%= time_ago_in_words(comment.created_at) %> ago</span>
             </div>
             <p style="color: #1f2937; margin: 0;"><%= comment.content %></p>

@@ -7,6 +7,7 @@ class Vote < ApplicationRecord
 
   after_save :update_anime_score
   after_destroy :update_anime_score
+  scope :recent, -> { order(created_at: :desc) }   # ← add this
 
   private
 

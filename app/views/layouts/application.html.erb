@@ -18,10 +18,11 @@
     <nav class="border-b border-gray-200">
       <div class="container mx-auto px-4 py-4 flex justify-between items-center">
         <%= link_to "Anime Tracker", root_path, class: "text-xl font-bold tracking-tight" %>
-        <div class="flex space-x-6">
+        <div class="flex items-center space-x-6">
           <%= link_to "Catalog", root_path, class: "hover:underline" %>
           <% if Current.user %>
             <%= link_to "Add Anime", new_anime_path, class: "hover:underline" %>
+            <%= link_to Current.user.name, Current.user, class: "hover:underline font-bold" %>
             <%= button_to "Log out", session_path, method: :delete, class: "hover:underline" %>
           <% else %>
             <%= link_to "Login", new_session_path, class: "hover:underline" %>
@@ -32,7 +33,7 @@
     </nav>
     <main class="container mx-auto mt-10 px-4">
       <% if notice %>
-        <div class="mb-4p-4 border border-gray-300 text-sm"><%= notice %></div>
+        <div class="mb-4 p-4 border border-gray-300 text-sm"><%= notice %></div>
       <% end %>
       <% if alert %>
         <div class="mb-4 p-4 border border-gray-300 text-sm font-bold"><%= alert %></div>

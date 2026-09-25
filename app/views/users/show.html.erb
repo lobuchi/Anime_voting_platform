@@ -1,0 +1,49 @@
+<div class="max-w-4xl mx-auto">
+  <div class="border border-gray-200 p-8 mb-8">
+    <div class="flex items-start gap-6">
+      <div class="w-24 h-24 shrink-0 border border-gray-200 overflow-hidden flex items-center justify-center bg-gray-100">
+        <% if @user.avatar_data.present? %>
+          <%= image_tag @user.avatar_data, class: "w-full h-full object-cover" %>
+        <% else %>
+          <span class="text-3xl font-bold text-gray-400"><%= @user.initial %></span>
+        <% end %>
+      </div>
+      <div class="flex-grow">
+        <h1 class="text-3xl font-bold mb-1"><%= @user.name %></h1>
+        <p class="text-gray-500 text-sm mb-3">
+          @<%= @user.username %> · Joined <%= @user.created_at.strftime("%B %Y") %>
+        </p>
+        <% if @user.bio.present? %>
+          <p class="text-gray-700 whitespace-pre-line mb-4"><%= @user.bio %></p>
+        <% end %>
+        <% if @user == Current.user %>
+          <%= link_to "Edit Profile", edit_profile_path,
+                class: "inline-block border border-black px-4 py-2 text-sm font-bold hover:bg-black hover:text-white transition-colors" %>
+        <% end %>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-4 gap-4 mt-8 pt-6 border-t border-gray-200 text-center">
+      <% { Votes: @votes.size, Comments: @comments.size,
+           Upvotes: @user.votes.where(value: 1).count,
+           Downvotes: @user.votes.where(value: -1).count }.each do |label, val| %>
+        <div>
+          <div class="text-2xl font-bold"><%= val %></div>
+          <div class="text-xs uppercase text-gray-500 mt-1"><%= label %></div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+  <h2 class="text-xl font-bold mb-4 pb-2 border-b">Recent Votes</h2>
+  <div class="space-y-3 mb-8">
+    <%= render @votes %>
+    <p class="text-gray-500 text-sm">No votes yet.</p> if @votes.empty?
+  </div>
+
+  <h2 class="text-xl font-bold mb-4 pb-2 border-b">Recent Comments</h2>
+  <div class="space-y-4">
+    <%= render @comments %>
+    <p class="text-gray-500 text-sm">No comments yet.</p> if @comments.empty?
+  </div>
+</div>

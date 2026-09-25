@@ -1,6 +1,7 @@
 Rails.application.routes.draw do
 
-  
+  resources :users, only: :show
+  resource :profile, only: [:edit, :update] 
   resource :session
   resource :registration, only: [:new, :create]
   resources :passwords, param: :token
