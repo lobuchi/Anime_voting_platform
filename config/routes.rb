@@ -6,9 +6,11 @@ Rails.application.routes.draw do
   resource :registration, only: [:new, :create]
   resources :passwords, param: :token
 
+
   resources :animes do
     resources :votes, only: [:create, :destroy]
     resources :comments, only: [:create, :destroy]
+    resource  :watch_status, only: [:create, :update, :destroy]   # ← add this line
   end
 
   get "up" => "rails/health#show", as: :rails_health_check

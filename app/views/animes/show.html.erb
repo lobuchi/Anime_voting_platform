@@ -12,7 +12,33 @@
       <div style="font-size: 1.5rem; font-weight: 700; color: #111827;"><%= @anime.score || 0 %></div>
     </div>
 
-    <!-- Consistent Voting Section for logged in users -->
+    <!-- Watch Status -->
+    <% if Current.user %>
+      <div style="padding-top: 1rem; border-top: 1px solid #e5e7eb;">
+        <h3 style="font-size: 0.875rem; text-transform: uppercase; letter-spacing: 0.05em; color: #6b7280; margin-bottom: 0.5rem; margin-top: 0;">Your Status</h3>
+
+        <% if @watch_status %>
+          <div style="margin-bottom: 0.5rem;">
+            <span class="<%= @watch_status.color_classes %>" style="display: inline-block; padding: 0.25rem 0.75rem; border: 1px solid; border-radius: 4px; font-size: 0.875rem; font-weight: 600;">
+              <%= @watch_status.label %>
+            </span>
+          </div>
+        <% end %>
+
+        <div style="display: flex; flex-wrap: wrap; gap: 0.25rem;">
+          <% WatchStatus.statuses.keys.each do |s| %>
+            <% active = @watch_status&.status == s %>
+            <%= button_to (active ? "✓ " : "") + s.titleize,
+                  anime_watch_status_path(@anime, status: s),
+                  method: active ? :delete : (@watch_status ? :patch : :post),
+                  form: { style: "margin: 0;" },
+                  style: "padding: 0.25rem 0.6rem; font-size: 0.75rem; border-radius: 4px; cursor: pointer; border: 1px solid #d1d5db; #{active ? 'background:#111827;color:#fff;' : 'background:#fff;color:#374151;'}" %>
+          <% end %>
+        </div>
+      </div>
+    <% end %>
+
+    <!-- Voting Section -->
     <div style="padding-top: 1rem; border-top: 1px solid #e5e7eb;">
       <% if Current.user %>
         <div style="display: flex; gap: 0.75rem; width: 100%;">

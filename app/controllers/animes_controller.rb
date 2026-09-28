@@ -12,6 +12,10 @@ class AnimesController < ApplicationController
   def show
     @comments = @anime.comments.includes(:user).order(created_at: :desc)
     @vote = Current.user ? @anime.votes.find_by(user: Current.user) : nil
+    @watch_status = Current.user ? Current.user.watch_statuses.find_by(anime: @anime) : nil
+
+
+
   end
 
   def new

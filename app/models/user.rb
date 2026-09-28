@@ -3,7 +3,7 @@ class User < ApplicationRecord
   has_many :sessions, dependent: :destroy
   has_many :votes, dependent: :destroy
   has_many :comments, dependent: :destroy
-
+  has_many :watch_statuses, dependent: :destroy
   normalizes :email_address, with: ->(e) { e.strip.downcase }
   attr_accessor :avatar_file
 
