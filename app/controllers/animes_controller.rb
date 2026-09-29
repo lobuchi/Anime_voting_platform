@@ -7,6 +7,7 @@ class AnimesController < ApplicationController
   def index
     # Vertical ranking: highest score first
     @animes = Anime.order(score: :desc, created_at: :desc)
+     @animes = @animes.where("title ILIKE ?", "%#{params[:q]}%") if params[:q].present?
   end
 
   def show
