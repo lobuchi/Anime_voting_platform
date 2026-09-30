@@ -1,1 +1,11 @@
 @import "tailwindcss";
+
+
+html.dark {
+  filter: invert(1) hue-rotate(180deg);
+}
+
+html.dark img,
+html.dark iframe {
+  filter: invert(1) hue-rotate(180deg);
+}
