@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_09_28_170422) do
+ActiveRecord::Schema[8.0].define(version: 2026_10_02_202725) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -51,6 +51,8 @@ ActiveRecord::Schema[8.0].define(version: 2026_09_28_170422) do
     t.datetime "updated_at", null: false
     t.text "description"
     t.text "image_data"
+    t.string "airing_status", default: "completed", null: false
+    t.index ["airing_status"], name: "index_animes_on_airing_status"
   end
 
   create_table "comments", force: :cascade do |t|

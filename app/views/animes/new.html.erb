@@ -19,6 +19,14 @@
     </div>
 
     <div>
+      <%= f.label :airing_status, "Airing Status", class: "block font-bold mb-2" %>
+      <%= f.select :airing_status,
+            [["Airing", "airing"], ["Completed", "completed"]],
+            {},
+            class: "w-full border border-gray-300 p-3 focus:outline-none focus:border-black" %>
+    </div>
+
+    <div>
       <%= f.label :description, class: "block font-bold mb-2" %>
       <%= f.text_area :description, rows: 4, class: "w-full border border-gray-300 p-3 focus:outline-none focus:border-black", placeholder: "Enter a brief summary of the anime..." %>
     </div>

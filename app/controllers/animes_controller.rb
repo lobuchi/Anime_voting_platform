@@ -19,6 +19,11 @@ class AnimesController < ApplicationController
 
   end
 
+  def anime_params
+      params.require(:anime).permit(:title, :description, :image_file, :trailer_url, :airing_status)
+  end
+
+
   def new
     @anime = Anime.new
   end

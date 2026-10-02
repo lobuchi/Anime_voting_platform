@@ -42,7 +42,12 @@
               <% end %>
             </div>
             <div class="flex-grow">
-              <h2 class="text-xl font-bold group-hover:underline"><%= anime.title %></h2>
+              <div class="flex items-center gap-2">
+                <h2 class="text-xl font-bold group-hover:underline"><%= anime.title %></h2>
+                <span class="<%= anime.airing_status_classes %>" style="display: inline-block; padding: 0.1rem 0.5rem; border: 1px solid; border-radius: 3px; font-size: 0.65rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em;">
+                  <%= anime.airing_status_label %>
+                </span>
+              </div>
               <div class="mt-2 text-sm text-gray-600 border border-gray-200 inline-block px-3 py-1">
                 Score: <strong><%= anime.score || 0 %></strong>
               </div>

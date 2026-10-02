@@ -1,19 +1,34 @@
 class Anime < ApplicationRecord
-  # REMOVED: has_one_attached :image (no more Active Storage/Cloudinary/Supabase)
+  # Associations
   has_many :votes, dependent: :destroy
   has_many :comments, dependent: :destroy
-  has_many :watch_status, dependent: :destroy
+  has_many :watch_statuses, dependent: :destroy
+
   # Virtual attribute to hold the uploaded file from the form
   attr_accessor :image_file
 
-  validates :title, presence: true
+  # Enum for airing status — prefix avoids method-name conflicts
+  enum :airing_status, {
+    airing:    "airing",
+    completed: "completed"
+  }, default: "completed", prefix: true
 
-  # Validate the file is present AND under the size limit
+  # Validations
+  validates :title, presence: true
   validate :image_file_presence
   validate :image_file_size
 
-  # Before saving, encode the uploaded file into Base64
+  # Encode uploaded image to Base64 before saving
   before_save :encode_image, if: -> { image_file.present? }
+
+  # Helpers — use the raw attribute, no reliance on generated predicates
+  def airing_status_label
+    airing_status == "airing" ? "Airing" : "Completed"
+  end
+
+  def airing_status_classes
+    airing_status == "airing" ? "bg-green-100 text-green-800 border-green-300" : "bg-blue-100 text-blue-800 border-blue-300"
+  end
 
   def calculate_rank
     votes.sum(:value)
@@ -23,6 +38,14 @@ class Anime < ApplicationRecord
     update(score: calculate_rank)
   end
 
+
+  def airing_status_style
+    if airing_status == "airing"
+      "background: #dcfce7; color: #166534; border: 1px solid #86efac;"
+    else
+      "background: #dbeafe; color: #1e40af; border: 1px solid #93c5fd;"
+    end
+  end
   private
 
   def encode_image
@@ -32,11 +55,11 @@ class Anime < ApplicationRecord
   end
 
   def image_file_presence
-    # Only require an image if we don't already have one stored
     if image_file.blank? && image_data.blank?
       errors.add(:image_file, "must be uploaded")
     end
   end
+
 
   def image_file_size
     if image_file.present? && image_file.size > 1.megabyte
