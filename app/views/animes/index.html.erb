@@ -1,10 +1,9 @@
-<h1 class="text-3xl font-bold mb-8 text-center border-b pb-4">Top Anime</h1>
-<p class="text-center text-sm text-gray-500 mb-6">
-  <%= pluralize(@animes.count, "anime") %> in the catalog
-</p>
-
 <div class="max-w-3xl mx-auto">
-  <h1 class="text-3xl font-bold mb-8 text-center border-b pb-4">Top Anime</h1>
+  <h1 class="text-3xl font-bold mb-2 text-center">Top Anime</h1>
+
+  <p class="text-center text-sm text-gray-500 mb-8 pb-4 border-b">
+    <%= pluralize(@animes.count, "anime") %> in the catalog
+  </p>
 
   <!-- Search Bar -->
   <%= form_with url: animes_path, method: :get, class: "mb-6" do |f| %>
