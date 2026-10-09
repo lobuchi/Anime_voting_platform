@@ -1,0 +1,52 @@
+<div class="max-w-2xl mx-auto border border-gray-200 p-8">
+  <h1 class="text-3xl font-bold mb-8 text-center">Edit Anime</h1>
+
+  <%= form_with(model: @anime, class: "space-y-6") do |f| %>
+    <% if @anime.errors.any? %>
+      <div class="p-4 border border-red-500 text-red-700 bg-red-50 mb-6 font-mono text-sm">
+        <strong><%= pluralize(@anime.errors.count, "error") %> prohibited this from being saved:</strong>
+        <ul class="list-disc ml-5 mt-2">
+          <% @anime.errors.full_messages.each do |msg| %>
+            <li><%= msg %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+
+    <div>
+      <%= f.label :title, class: "block font-bold mb-2" %>
+      <%= f.text_field :title, class: "w-full border border-gray-300 p-3 focus:outline-none focus:border-black" %>
+    </div>
+
+    <div>
+      <%= f.label :airing_status, "Airing Status", class: "block font-bold mb-2" %>
+      <%= f.select :airing_status,
+            [["Airing", "airing"], ["Completed", "completed"]],
+            {},
+            class: "w-full border border-gray-300 p-3 focus:outline-none focus:border-black" %>
+    </div>
+
+    <div>
+      <%= f.label :description, class: "block font-bold mb-2" %>
+      <%= f.text_area :description, rows: 4, class: "w-full border border-gray-300 p-3 focus:outline-none focus:border-black" %>
+    </div>
+
+    <div>
+      <%= f.label :image_file, "Replace Image (Max 1MB, optional)", class: "block font-bold mb-2" %>
+      <%= f.file_field :image_file, accept: "image/*", class: "w-full border border-gray-300 p-3 focus:outline-none focus:border-black" %>
+      <% if @anime.image_data.present? %>
+        <p class="text-xs text-gray-500 mt-1">Leave blank to keep the current image.</p>
+      <% end %>
+    </div>
+
+    <div>
+      <%= f.label :trailer_url, "YouTube Trailer URL (Optional)", class: "block font-bold mb-2" %>
+      <%= f.text_field :trailer_url, class: "w-full border border-gray-300 p-3 focus:outline-none focus:border-black" %>
+    </div>
+
+    <div class="pt-4 flex justify-between items-center">
+      <%= link_to "Cancel", @anime, class: "hover:underline text-gray-500" %>
+      <%= f.submit "Update Anime", class: "border border-black px-8 py-3 font-bold cursor-pointer hover:bg-black hover:text-white transition-colors" %>
+    </div>
+  <% end %>
+</div>

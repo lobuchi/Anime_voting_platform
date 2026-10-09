@@ -1,28 +1,19 @@
 class AnimesController < ApplicationController
   allow_unauthenticated_access only: [:index, :show]
   before_action :resume_session, only: [:index, :show]
-  before_action :set_anime, only: [:show, :destroy]
-  before_action :require_admin, only: [:destroy]
+  before_action :set_anime, only: [:show, :edit, :update, :destroy]
+  before_action :require_admin, only: [:edit, :update, :destroy]
 
   def index
-    # Vertical ranking: highest score first
     @animes = Anime.order(score: :desc, created_at: :desc)
-     @animes = @animes.where("title ILIKE ?", "%#{params[:q]}%") if params[:q].present?
+    @animes = @animes.where("title ILIKE ?", "%#{params[:q]}%") if params[:q].present?
   end
 
   def show
-    @comments = @anime.comments.includes(:user).order(created_at: :desc)
-    @vote = Current.user ? @anime.votes.find_by(user: Current.user) : nil
+    @comments     = @anime.comments.includes(:user).order(created_at: :desc)
+    @vote         = Current.user ? @anime.votes.find_by(user: Current.user) : nil
     @watch_status = Current.user ? Current.user.watch_statuses.find_by(anime: @anime) : nil
-
-
-
   end
-
-  def anime_params
-      params.require(:anime).permit(:title, :description, :image_file, :trailer_url, :airing_status)
-  end
-
 
   def new
     @anime = Anime.new
@@ -35,6 +26,17 @@ class AnimesController < ApplicationController
       redirect_to @anime, notice: "Anime was successfully added."
     else
       render :new, status: :unprocessable_entity
+    end
+  end
+
+  def edit
+  end
+
+  def update
+    if @anime.update(anime_params)
+      redirect_to @anime, notice: "Anime was successfully updated."
+    else
+      render :edit, status: :unprocessable_entity
     end
   end
 
@@ -56,7 +58,6 @@ class AnimesController < ApplicationController
   end
 
   def anime_params
-    # Base64 storage — accepts the virtual :image_file attribute
-    params.require(:anime).permit(:title, :description, :image_file, :trailer_url)
+    params.require(:anime).permit(:title, :description, :image_file, :trailer_url, :airing_status)
   end
 end
