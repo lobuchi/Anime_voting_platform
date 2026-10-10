@@ -14,6 +14,10 @@ Rails.application.routes.draw do
   end
 
   get "up" => "rails/health#show", as: :rails_health_check
+  get "/about",   to: "pages#about",   as: :about
+  get "/privacy", to: "pages#privacy", as: :privacy
+
+
 
   root "animes#index"
 end
