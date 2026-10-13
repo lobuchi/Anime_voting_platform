@@ -111,7 +111,9 @@
       <!-- Description Section -->
       <% if @anime.description.present? %>
         <p style="color: #4b5563; font-size: 1rem; line-height: 1.6; margin: 0; white-space: pre-line;"><%= @anime.description %></p>
-      <% end %>
+     <p style="font-size: 0.75rem; color: #9ca3af; margin-top: 0.5rem;">
+  Last updated <%= time_ago_in_words(@anime.updated_at) %> ago
+</p> <% end %>
     </div>
 
     <!-- Trailer -->
