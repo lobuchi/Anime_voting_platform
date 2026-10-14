@@ -55,9 +55,14 @@
                   <%= anime.airing_status_label %>
                 </span>
               </div>
-              <div class="mt-2 text-sm text-gray-600 border border-gray-200 inline-block px-3 py-1">
-                Score: <strong><%= anime.score || 0 %></strong>
-              </div>
+            <div class="mt-2 flex items-center gap-2 flex-wrap">
+  <div class="text-sm text-gray-600 border border-gray-200 inline-block px-3 py-1">
+    Score: <strong><%= anime.score || 0 %></strong>
+  </div>
+  <div class="text-sm text-gray-600 border border-gray-200 inline-block px-3 py-1">
+    💬 <strong><%= anime.comments.count %></strong>
+  </div>
+</div>
             </div>
           </div>
         <% end %>
