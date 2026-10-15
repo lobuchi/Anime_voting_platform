@@ -44,6 +44,43 @@
         color: #ffffff;
       }
 
+
+      /* =========================
+   Dark Mode — Utility Overrides
+   ========================= */
+html.dark-mode .border-gray-100 { border-color: #374151; }
+html.dark-mode .border-gray-200 { border-color: #374151; }
+html.dark-mode .border-gray-300 { border-color: #4b5563; }
+
+html.dark-mode .text-gray-600 { color: #9ca3af; }
+html.dark-mode .text-gray-500 { color: #9ca3af; }
+html.dark-mode .text-gray-400 { color: #6b7280; }
+html.dark-mode .text-gray-300 { color: #4b5563; }
+
+html.dark-mode .bg-gray-100 { background-color: #1f2937; }
+
+/* Inputs */
+html.dark-mode input[type="text"],
+html.dark-mode input[type="email"],
+html.dark-mode input[type="password"],
+html.dark-mode input[type="file"],
+html.dark-mode textarea,
+html.dark-mode select {
+  background: #1f2937;
+  color: #ffffff;
+  border-color: #4b5563;
+}
+
+html.dark-mode input::placeholder,
+html.dark-mode textarea::placeholder {
+  color: #6b7280;
+}
+
+/* Hovered card borders — black is invisible on dark bg */
+html.dark-mode .hover\:border-black:hover {
+  border-color: #f3f4f6;
+}
+
       /* =========================
          Navigation
          ========================= */
@@ -212,6 +249,15 @@
         .main-container { margin-top: 24px; }
         #scrollToTopBtn { right: 16px; bottom: 16px; }
       }
+
+      /* =========================
+   Dark Mode — Brighten inline-styled text
+   ========================= */
+html.dark-mode [style*="color: #4b5563"] { color: #d1d5db !important; }   /* description */
+html.dark-mode [style*="color: #6b7280"] { color: #9ca3af !important; }   /* section labels */
+html.dark-mode [style*="color: #111827"] { color: #f9fafb !important; }   /* score values */
+html.dark-mode [style*="color: #1f2937"] { color: #e5e7eb !important; }   /* comment body */
+html.dark-mode [style*="color: #9ca3af"] { color: #cbd5e1 !important; }   /* timestamps */
     </style>
   </head>
 
