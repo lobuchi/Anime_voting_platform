@@ -13,6 +13,9 @@
     <div style="padding-top: 1rem; border-top: 1px solid #e5e7eb;">
       <h3 style="font-size: 0.875rem; text-transform: uppercase; letter-spacing: 0.05em; color: #6b7280; margin-bottom: 0.5rem; margin-top: 0;">Current Score</h3>
       <div style="font-size: 1.5rem; font-weight: 700; color: #111827;"><%= @anime.score || 0 %></div>
+     <p style="font-size: 0.75rem; color: #9ca3af; margin: 0.25rem 0 0 0;">
+    from <%= pluralize(@anime.votes.count, "users") %>
+  </p>
     </div>
 
     <!-- Watch Status -->
