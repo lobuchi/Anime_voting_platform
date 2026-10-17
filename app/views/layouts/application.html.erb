@@ -269,8 +269,24 @@ html.dark-mode [style*="color: #9ca3af"] { color: #cbd5e1 !important; }   /* tim
         <%= link_to "Anime Tracker", root_path, class: "site-title" %>
         <div class="nav-links">
           <% if Current.user %>
+            
+
             <%= link_to "Add Anime", new_anime_path %>
-            <%= link_to Current.user.name, Current.user, class: "nav-user" %>
+
+
+            <%= link_to Current.user, style: "display: inline-flex; align-items: center; gap: 8px; text-decoration: none; color: inherit;" do %>
+  <div style="width: 26px; height: 26px; border-radius: 50%; overflow: hidden; background: #e5e7eb; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: bold; color: #374151;">
+    <% if Current.user.avatar_data.present? %>
+      <%= image_tag Current.user.avatar_data, style: "width: 100%; height: 100%; object-fit: cover;" %>
+    <% else %>
+      <%= Current.user.initial %>
+    <% end %>
+  </div>
+  <span class="nav-user"><%= Current.user.name %></span>
+<% end %>
+
+
+
             <%= button_to "Log out", session_path, method: :delete, form: { style: "margin: 0;" } %>
           <% else %>
             <%= link_to "Login", new_session_path %>
