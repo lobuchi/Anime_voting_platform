@@ -7,7 +7,16 @@ class AnimesController < ApplicationController
   def index
     @animes = Anime.order(score: :desc, created_at: :desc)
     @animes = @animes.where("title ILIKE ?", "%#{params[:q]}%") if params[:q].present?
+
+    # Sidebar data
+    @trending = Anime.order(score: :desc).limit(3)
+    
+    # Fetch from Kitsu API
+    @upcoming_anime = KitsuService.upcoming_anime
+    @top_airing = KitsuService.top_airing_anime
   end
+
+
 
   def show
     @comments     = @anime.comments.includes(:user).order(created_at: :desc)

@@ -1,80 +1,112 @@
 <% content_for :title, "Top Anime" %>
 
-<div class="max-w-3xl mx-auto">
-  <h1 class="text-3xl font-bold mb-2 text-center">Top Anime</h1>
-
-  <p class="text-center text-sm text-gray-500 mb-8 pb-4 border-b">
-    <%= pluralize(@animes.count, "anime") %> in the catalog
-  </p>
-
-  <!-- Search Bar -->
-  <%= form_with url: animes_path, method: :get, class: "mb-6" do |f| %>
-    <div class="flex gap-2">
-      <%= f.text_field :q,
-            value: params[:q],
-            placeholder: "Find your next anime...",
-            autocomplete: "off",
-            autofocus: true,
-            class: "flex-grow border border-gray-300 p-3 focus:outline-none focus:border-black" %>
-      <%= f.submit "Search",
-            class: "border border-black px-6 py-3 font-bold cursor-pointer hover:bg-black hover:text-white transition-colors" %>
-      <% if params[:q].present? %>
-        <%= link_to "Clear", animes_path,
-              class: "border border-gray-300 px-6 py-3 font-bold hover:bg-gray-100 transition-colors" %>
-      <% end %>
-    </div>
-  <% end %>
-
-  <!-- Result Count -->
-  <% if params[:q].present? && @animes.any? %>
-    <p class="text-sm text-gray-500 mb-4">
-      <%= pluralize(@animes.count, "result") %> for "<%= params[:q] %>"
-    </p>
-  <% end %>
-
-  <!-- Anime List -->
-  <% if @animes.any? %>
-    <div class="flex flex-col space-y-6">
-      <% @animes.each_with_index do |anime, index| %>
-        <%= link_to anime, class: "group block border border-gray-200 p-4 hover:border-black transition-colors" do %>
-          <div class="flex items-center space-x-6">
-            <div class="text-3xl font-bold text-gray-300 w-12 text-center">
-              #<%= index + 1 %>
-            </div>
-            <div class="w-24 h-32 shrink-0 border border-gray-100 overflow-hidden">
-              <% if anime.image_data.present? %>
-                <%= image_tag anime.image_data, class: "w-full h-full object-cover" %>
-              <% else %>
-                <div class="bg-gray-100 w-full h-full flex items-center justify-center text-xs text-gray-400">No Image</div>
-              <% end %>
-            </div>
-            <div class="flex-grow">
-              <div class="flex items-center gap-2">
-                <h2 class="text-xl font-bold group-hover:underline" title="<%= anime.title %>"><%= anime.title %></h2>
-                <span class="<%= anime.airing_status_classes %>" style="display: inline-block; padding: 0.1rem 0.5rem; border: 1px solid; border-radius: 3px; font-size: 0.65rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em;">
-                  <%= anime.airing_status_label %>
-                </span>
+<!-- Standard 12-column grid: Left (3), Center (6), Right (3) -->
+<div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 items-start px-4">
+  
+  <!-- LEFT SIDEBAR (Top Airing from Kitsu) -->
+  <aside class="hidden lg:block lg:col-span-3 space-y-6">
+    <div class="border border-gray-200 dark:border-gray-700 p-5 rounded">
+      <h3 class="font-bold text-sm uppercase tracking-wider text-gray-500 mb-4">Top Airing</h3>
+      <div class="space-y-4">
+        <% if @top_airing.any? %>
+          <% @top_airing.each do |anime| %>
+            <div class="flex items-center gap-3">
+              <div style="width: 48px; height: 64px; flex-shrink: 0;" class="border border-gray-200 dark:border-gray-600 overflow-hidden rounded bg-gray-100 dark:bg-gray-800">
+                 <% if anime["images"] && anime["images"]["jpg"] %>
+                   <%= image_tag anime["images"]["jpg"]["image_url"], style: "width: 100%; height: 100%; object-fit: cover;", onerror: "this.src='https://placehold.co/100x150/1f2937/ffffff?text=No+Img';" %>
+                 <% end %>
               </div>
-              <div class="mt-2 flex items-center gap-2 flex-wrap">
-                <div class="text-sm text-gray-600 border border-gray-200 inline-block px-3 py-1">
-                  Score: <strong><%= anime.score || 0 %></strong>
-                </div>
-                <div class="text-sm text-gray-600 border border-gray-200 inline-block px-3 py-1">
-                  💬 <strong><%= anime.comments.count %></strong>
+              <div class="overflow-hidden">
+                <div class="text-sm font-bold leading-tight truncate"><%= anime["title_english"] || anime["title"] %></div>
+                <div class="text-xs text-gray-500 mt-1">
+                  <%= anime["type"] %> • Currently Airing
                 </div>
               </div>
             </div>
-          </div>
+          <% end %>
+        <% else %>
+          <p class="text-sm text-gray-500 italic">Could not load top airing anime.</p>
         <% end %>
-      <% end %>
+      </div>
     </div>
-  <% else %>
-    <p class="text-center text-gray-500 py-12">
-      <% if params[:q].present? %>
-        No anime found matching "<%= params[:q] %>".
-      <% else %>
-        No anime yet.
-      <% end %>
+  </aside>
+
+  <!-- CENTER (Main Content) -->
+  <main class="lg:col-span-6 min-w-0">
+    <h1 class="text-3xl font-bold mb-2 text-center">Top Anime</h1>
+    <p class="text-center text-sm text-gray-500 mb-8 pb-4 border-b border-gray-200 dark:border-gray-700">
+      <%= pluralize(@animes.count, "anime") %> in the catalog
     </p>
-  <% end %>
+
+    <%= form_with url: animes_path, method: :get, class: "mb-6" do |f| %>
+      <div class="flex gap-2">
+        <%= f.text_field :q, value: params[:q], placeholder: "Find your next anime...", autocomplete: "off", autofocus: true, class: "flex-grow border border-gray-300 p-3 focus:outline-none focus:border-black" %>
+        <%= f.submit "Search", class: "border border-black px-6 py-3 font-bold cursor-pointer hover:bg-black hover:text-white transition-colors" %>
+      </div>
+    <% end %>
+
+    <% if @animes.any? %>
+      <div class="flex flex-col space-y-6">
+        <% @animes.each_with_index do |anime, index| %>
+          <%= link_to anime, class: "group block border border-gray-200 p-4 hover:border-black transition-colors" do %>
+            <div class="flex items-center space-x-6">
+              <div class="text-3xl font-bold text-gray-300 w-12 text-center">#<%= index + 1 %></div>
+              <div class="w-24 h-32 shrink-0 border border-gray-100 overflow-hidden">
+                <% if anime.image_data.present? %>
+                  <%= image_tag anime.image_data, class: "w-full h-full object-cover" %>
+                <% else %>
+                  <div class="bg-gray-100 w-full h-full flex items-center justify-center text-xs text-gray-400">No Image</div>
+                <% end %>
+              </div>
+              <div class="flex-grow">
+                <div class="flex items-center gap-2">
+                  <h2 class="text-xl font-bold group-hover:underline"><%= anime.title %></h2>
+                  <span class="<%= anime.airing_status_classes %>" style="display: inline-block; padding: 0.1rem 0.5rem; border: 1px solid; border-radius: 3px; font-size: 0.65rem; font-weight: 700; text-transform: uppercase;">
+                    <%= anime.airing_status_label %>
+                  </span>
+                </div>
+                <div class="mt-2 flex items-center gap-2 flex-wrap">
+                  <div class="text-sm text-gray-600 border border-gray-200 inline-block px-3 py-1">Score: <strong><%= anime.score || 0 %></strong></div>
+                  <div class="text-sm text-gray-600 border border-gray-200 inline-block px-3 py-1">💬 <strong><%= anime.comments.count %></strong></div>
+                </div>
+              </div>
+            </div>
+          <% end %>
+        <% end %>
+      </div>
+    <% else %>
+      <p class="text-center text-gray-500 py-12">No anime found.</p>
+    <% end %>
+  </main>
+
+  <!-- RIGHT SIDEBAR (Upcoming Only) -->
+  <aside class="hidden lg:block lg:col-span-3 space-y-6">
+    
+    <!-- Upcoming Releases -->
+    <div class="border border-gray-200 dark:border-gray-700 p-5 rounded">
+      <h3 class="font-bold text-sm uppercase tracking-wider text-gray-500 mb-4">Upcoming</h3>
+      <div class="space-y-4">
+        <% if @upcoming_anime.any? %>
+          <% @upcoming_anime.each do |anime| %>
+            <div class="flex items-center gap-3">
+              <div style="width: 48px; height: 64px; flex-shrink: 0;" class="border border-gray-200 dark:border-gray-600 overflow-hidden rounded bg-gray-100 dark:bg-gray-800">
+                 <% if anime["images"] && anime["images"]["jpg"] %>
+                   <%= image_tag anime["images"]["jpg"]["image_url"], style: "width: 100%; height: 100%; object-fit: cover;", onerror: "this.src='https://placehold.co/100x150/1f2937/ffffff?text=No+Img';" %>
+                 <% end %>
+              </div>
+              <div class="overflow-hidden">
+                <div class="text-sm font-bold leading-tight truncate"><%= anime["title_english"] || anime["title"] %></div>
+                <div class="text-xs text-gray-500 mt-1">
+                  <%= anime["type"] %> • <%= anime["aired"]["from"] ? Date.parse(anime["aired"]["from"]).strftime("%b %Y") : "TBA" %>
+                </div>
+              </div>
+            </div>
+          <% end %>
+        <% else %>
+          <p class="text-sm text-gray-500 italic">Could not load upcoming anime right now.</p>
+        <% end %>
+      </div>
+    </div>
+
+  </aside>
 </div>
