@@ -10,7 +10,8 @@
       <div class="space-y-4">
         <% if @top_airing.any? %>
           <% @top_airing.each do |anime| %>
-            <div class="flex items-center gap-3">
+            <!-- MADE CLICKABLE -->
+            <a href="<%= anime["url"] %>" target="_blank" rel="noopener noreferrer" class="flex items-center gap-3 hover:opacity-80 transition-opacity">
               <div style="width: 48px; height: 64px; flex-shrink: 0;" class="border border-gray-200 dark:border-gray-600 overflow-hidden rounded bg-gray-100 dark:bg-gray-800">
                  <% if anime["images"] && anime["images"]["jpg"] %>
                    <%= image_tag anime["images"]["jpg"]["image_url"], style: "width: 100%; height: 100%; object-fit: cover;", onerror: "this.src='https://placehold.co/100x150/1f2937/ffffff?text=No+Img';" %>
@@ -22,7 +23,7 @@
                   <%= anime["type"] %> • Currently Airing
                 </div>
               </div>
-            </div>
+            </a>
           <% end %>
         <% else %>
           <p class="text-sm text-gray-500 italic">Could not load top airing anime.</p>
@@ -88,7 +89,8 @@
       <div class="space-y-4">
         <% if @upcoming_anime.any? %>
           <% @upcoming_anime.each do |anime| %>
-            <div class="flex items-center gap-3">
+            <!-- MADE CLICKABLE -->
+            <a href="<%= anime["url"] %>" target="_blank" rel="noopener noreferrer" class="flex items-center gap-3 hover:opacity-80 transition-opacity">
               <div style="width: 48px; height: 64px; flex-shrink: 0;" class="border border-gray-200 dark:border-gray-600 overflow-hidden rounded bg-gray-100 dark:bg-gray-800">
                  <% if anime["images"] && anime["images"]["jpg"] %>
                    <%= image_tag anime["images"]["jpg"]["image_url"], style: "width: 100%; height: 100%; object-fit: cover;", onerror: "this.src='https://placehold.co/100x150/1f2937/ffffff?text=No+Img';" %>
@@ -100,7 +102,7 @@
                   <%= anime["type"] %> • <%= anime["aired"]["from"] ? Date.parse(anime["aired"]["from"]).strftime("%b %Y") : "TBA" %>
                 </div>
               </div>
-            </div>
+            </a>
           <% end %>
         <% else %>
           <p class="text-sm text-gray-500 italic">Could not load upcoming anime right now.</p>

@@ -18,6 +18,21 @@ class KitsuService
     end
   end
 
+  def self.top_airing_anime
+    cached_data = Rails.cache.read("top_airing_kitsu")
+    return cached_data if cached_data.present?
+
+    # Fetch currently airing, sorted by highest rating
+    live_data = fetch_data("#{BASE_URL}/anime?filter[status]=current&sort=-averageRating&page[limit]=5")
+
+    if live_data.any?
+      Rails.cache.write("top_airing_kitsu", live_data, expires_in: 12.hours)
+      return live_data
+    else
+      return []
+    end
+  end
+
   private
 
   def self.fetch_data(url)
@@ -41,6 +56,8 @@ class KitsuService
           "title_english" => attrs["titles"]&.dig("en"),
           "type" => attrs["subtype"]&.upcase,
           "aired" => { "from" => attrs["startDate"] },
+          # ADDED URL HERE
+          "url" => "https://kitsu.io/anime/#{item['id']}",
           # Kitsu image CDN is safe for hotlinking (no proxy needed)
           "images" => { "jpg" => { "image_url" => attrs.dig("posterImage", "medium") || attrs.dig("posterImage", "original") } }
         }
@@ -62,6 +79,7 @@ class KitsuService
         "title_english" => "Solo Leveling Season 2",
         "type" => "TV",
         "aired" => { "from" => "2025-01-05T00:00:00Z" },
+        "url" => "https://kitsu.io",
         "images" => { "jpg" => { "image_url" => "https://media.kitsu.io/anime/poster_images/44979/medium.jpg" } }
       },
       {
@@ -69,6 +87,7 @@ class KitsuService
         "title_english" => "One Punch Man 3",
         "type" => "TV",
         "aired" => { "from" => "2025-10-01T00:00:00Z" },
+        "url" => "https://kitsu.io",
         "images" => { "jpg" => { "image_url" => "https://media.kitsu.io/anime/poster_images/41287/medium.jpg" } }
       },
       {
@@ -76,23 +95,9 @@ class KitsuService
         "title_english" => "Chainsaw Man - The Movie: Reze Arc",
         "type" => "Movie",
         "aired" => { "from" => "2025-09-19T00:00:00Z" },
+        "url" => "https://kitsu.io",
         "images" => { "jpg" => { "image_url" => "https://media.kitsu.io/anime/poster_images/43167/medium.jpg" } }
       }
     ]
-  end
-
-    def self.top_airing_anime
-    cached_data = Rails.cache.read("top_airing_kitsu")
-    return cached_data if cached_data.present?
-
-    # Fetch currently airing, sorted by highest rating
-    live_data = fetch_data("#{BASE_URL}/anime?filter[status]=current&sort=-averageRating&page[limit]=5")
-
-    if live_data.any?
-      Rails.cache.write("top_airing_kitsu", live_data, expires_in: 12.hours)
-      return live_data
-    else
-      return []
-    end
   end
 end
