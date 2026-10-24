@@ -10,7 +10,6 @@
       <div class="space-y-4">
         <% if @top_airing.any? %>
           <% @top_airing.each do |anime| %>
-            <!-- MADE CLICKABLE -->
             <a href="<%= anime["url"] %>" target="_blank" rel="noopener noreferrer" class="flex items-center gap-3 hover:opacity-80 transition-opacity">
               <div style="width: 48px; height: 64px; flex-shrink: 0;" class="border border-gray-200 dark:border-gray-600 overflow-hidden rounded bg-gray-100 dark:bg-gray-800">
                  <% if anime["images"] && anime["images"]["jpg"] %>
@@ -51,7 +50,18 @@
         <% @animes.each_with_index do |anime, index| %>
           <%= link_to anime, class: "group block border border-gray-200 p-4 hover:border-black transition-colors" do %>
             <div class="flex items-center space-x-6">
-              <div class="text-3xl font-bold text-gray-300 w-12 text-center">#<%= index + 1 %></div>
+              
+              <!-- NEW: Medal Colors for Top 3 -->
+              <% rank_color = case index
+                              when 0 then "text-yellow-500 drop-shadow-md"
+                              when 1 then "text-gray-400 drop-shadow-sm"
+                              when 2 then "text-amber-600 drop-shadow-sm"
+                              else "text-gray-300 dark:text-gray-700"
+                              end %>
+              <div class="text-3xl font-bold w-12 text-center <%= rank_color %>">
+                #<%= index + 1 %>
+              </div>
+
               <div class="w-24 h-32 shrink-0 border border-gray-100 overflow-hidden">
                 <% if anime.image_data.present? %>
                   <%= image_tag anime.image_data, class: "w-full h-full object-cover" %>
@@ -89,7 +99,6 @@
       <div class="space-y-4">
         <% if @upcoming_anime.any? %>
           <% @upcoming_anime.each do |anime| %>
-            <!-- MADE CLICKABLE -->
             <a href="<%= anime["url"] %>" target="_blank" rel="noopener noreferrer" class="flex items-center gap-3 hover:opacity-80 transition-opacity">
               <div style="width: 48px; height: 64px; flex-shrink: 0;" class="border border-gray-200 dark:border-gray-600 overflow-hidden rounded bg-gray-100 dark:bg-gray-800">
                  <% if anime["images"] && anime["images"]["jpg"] %>
