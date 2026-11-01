@@ -51,14 +51,14 @@
           <%= link_to anime, class: "group block border border-gray-200 p-4 hover:border-black transition-colors" do %>
             <div class="flex items-center space-x-6">
               
-              <!-- NEW: Medal Colors for Top 3 -->
-              <% rank_color = case index
-                              when 0 then "text-yellow-500 drop-shadow-md"
-                              when 1 then "text-gray-400 drop-shadow-sm"
-                              when 2 then "text-amber-600 drop-shadow-sm"
-                              else "text-gray-300 dark:text-gray-700"
+              <!-- Medal Colors for Top 3 -->
+              <% rank_style = case index
+                              when 0 then "color: #fbbf24; text-shadow: 0 2px 4px rgba(0,0,0,0.3);" # Gold
+                              when 1 then "color: #9ca3af; text-shadow: 0 1px 3px rgba(0,0,0,0.2);" # Silver
+                              when 2 then "color: #b45309; text-shadow: 0 1px 3px rgba(0,0,0,0.2);" # Bronze
+                              else "color: inherit;"
                               end %>
-              <div class="text-3xl font-bold w-12 text-center <%= rank_color %>">
+              <div class="text-3xl font-bold w-12 text-center" style="<%= rank_style %>">
                 #<%= index + 1 %>
               </div>
 
@@ -72,9 +72,15 @@
               <div class="flex-grow">
                 <div class="flex items-center gap-2">
                   <h2 class="text-xl font-bold group-hover:underline"><%= anime.title %></h2>
-                  <span class="<%= anime.airing_status_classes %>" style="display: inline-block; padding: 0.1rem 0.5rem; border: 1px solid; border-radius: 3px; font-size: 0.65rem; font-weight: 700; text-transform: uppercase;">
+                  
+                  <!-- ADDED PULSING DOT HERE -->
+                  <span class="<%= anime.airing_status_classes %>" style="display: inline-flex; align-items: center; padding: 0.1rem 0.5rem; border: 1px solid; border-radius: 3px; font-size: 0.65rem; font-weight: 700; text-transform: uppercase;">
+                    <% if anime.airing_status == "airing" %>
+                      <span class="status-dot"></span>
+                    <% end %>
                     <%= anime.airing_status_label %>
                   </span>
+
                 </div>
                 <div class="mt-2 flex items-center gap-2 flex-wrap">
                   <div class="text-sm text-gray-600 border border-gray-200 inline-block px-3 py-1">Score: <strong><%= anime.score || 0 %></strong></div>

@@ -258,6 +258,26 @@ html.dark-mode [style*="color: #6b7280"] { color: #9ca3af !important; }   /* sec
 html.dark-mode [style*="color: #111827"] { color: #f9fafb !important; }   /* score values */
 html.dark-mode [style*="color: #1f2937"] { color: #e5e7eb !important; }   /* comment body */
 html.dark-mode [style*="color: #9ca3af"] { color: #cbd5e1 !important; }   /* timestamps */
+
+
+/* Pulsing Live Dot for Airing Anime */
+.status-dot {
+  height: 6px;
+  width: 6px;
+  background-color: #ef4444; /* red-500 */
+  border-radius: 50%;
+  display: inline-block;
+  margin-right: 5px;
+  box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7);
+  animation: pulse-red 2s infinite;
+}
+
+@keyframes pulse-red {
+  0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); }
+  70% { transform: scale(1); box-shadow: 0 0 0 4px rgba(239, 68, 68, 0); }
+  100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+}
+
     </style>
   </head>
 
