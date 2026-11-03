@@ -23,7 +23,6 @@
                     <%= anime["type"] %> • Currently Airing
                   </div>
                 </div>
-                <!-- NEW: External Link Arrow -->
                 <span class="text-gray-400 text-xs mt-1 shrink-0 opacity-0 group-hover:opacity-100 transition-opacity">↗</span>
               </div>
             </a>
@@ -44,7 +43,8 @@
 
     <%= form_with url: animes_path, method: :get, class: "mb-6" do |f| %>
       <div class="flex gap-2">
-        <%= f.text_field :q, value: params[:q], placeholder: "Find your next anime...", autocomplete: "off", autofocus: true, class: "flex-grow border border-gray-300 p-3 focus:outline-none focus:border-black" %>
+        <!-- ADDED id="search-input" HERE -->
+        <%= f.text_field :q, id: "search-input", value: params[:q], placeholder: "Find your next anime... (Press / to focus)", autocomplete: "off", autofocus: true, class: "flex-grow border border-gray-300 p-3 focus:outline-none focus:border-black" %>
         <%= f.submit "Search", class: "border border-black px-6 py-3 font-bold cursor-pointer hover:bg-black hover:text-white transition-colors" %>
       </div>
     <% end %>
@@ -87,7 +87,6 @@
 
                 </div>
                 <div class="mt-2 flex items-center gap-2 flex-wrap">
-                  <!-- NEW: Added Star to Score -->
                   <div class="text-sm text-gray-600 border border-gray-200 inline-block px-3 py-1">⭐ <strong><%= anime.score || 0 %></strong></div>
                   <div class="text-sm text-gray-600 border border-gray-200 inline-block px-3 py-1">💬 <strong><%= anime.comments.count %></strong></div>
                 </div>
@@ -123,7 +122,6 @@
                     <%= anime["type"] %> • <%= anime["aired"]["from"] ? Date.parse(anime["aired"]["from"]).strftime("%b %Y") : "TBA" %>
                   </div>
                 </div>
-                <!-- NEW: External Link Arrow -->
                 <span class="text-gray-400 text-xs mt-1 shrink-0 opacity-0 group-hover:opacity-100 transition-opacity">↗</span>
               </div>
             </a>
@@ -136,3 +134,15 @@
 
   </aside>
 </div>
+
+<!-- ADDED: Press '/' to focus search -->
+<script>
+  document.addEventListener('keydown', function(e) {
+    // If user presses '/' and is not already typing in an input
+    if (e.key === '/' && document.activeElement.tagName !== 'INPUT' && document.activeElement.tagName !== 'TEXTAREA') {
+      e.preventDefault();
+      const searchInput = document.getElementById('search-input');
+      if (searchInput) searchInput.focus();
+    }
+  });
+</script>
