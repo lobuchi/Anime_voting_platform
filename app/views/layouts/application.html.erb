@@ -44,43 +44,6 @@
         color: #ffffff;
       }
 
-
-      /* =========================
-   Dark Mode — Utility Overrides
-   ========================= */
-html.dark-mode .border-gray-100 { border-color: #374151; }
-html.dark-mode .border-gray-200 { border-color: #374151; }
-html.dark-mode .border-gray-300 { border-color: #4b5563; }
-
-html.dark-mode .text-gray-600 { color: #9ca3af; }
-html.dark-mode .text-gray-500 { color: #9ca3af; }
-html.dark-mode .text-gray-400 { color: #6b7280; }
-html.dark-mode .text-gray-300 { color: #4b5563; }
-
-html.dark-mode .bg-gray-100 { background-color: #1f2937; }
-
-/* Inputs */
-html.dark-mode input[type="text"],
-html.dark-mode input[type="email"],
-html.dark-mode input[type="password"],
-html.dark-mode input[type="file"],
-html.dark-mode textarea,
-html.dark-mode select {
-  background: #1f2937;
-  color: #ffffff;
-  border-color: #4b5563;
-}
-
-html.dark-mode input::placeholder,
-html.dark-mode textarea::placeholder {
-  color: #6b7280;
-}
-
-/* Hovered card borders — black is invisible on dark bg */
-html.dark-mode .hover\:border-black:hover {
-  border-color: #f3f4f6;
-}
-
       /* =========================
          Navigation
          ========================= */
@@ -118,25 +81,22 @@ html.dark-mode .hover\:border-black:hover {
       }
 
       .nav-links a,
-      .nav-links button {
+      .nav-links form button {
         color: inherit;
         text-decoration: none;
         background: none;
         border: none;
-        font-size: inherit;
-        font-family: inherit;
+        font: inherit;
         cursor: pointer;
         padding: 0;
       }
 
       .nav-links a:hover,
-      .nav-links button:hover {
+      .nav-links form button:hover {
         text-decoration: underline;
       }
 
-      .nav-user {
-        font-weight: bold;
-      }
+      .nav-user { font-weight: bold; }
 
       /* =========================
          Theme button
@@ -178,9 +138,7 @@ html.dark-mode .hover\:border-black:hover {
         border-color: #4b5563;
       }
 
-      .flash-alert {
-        font-weight: bold;
-      }
+      .flash-alert { font-weight: bold; }
 
       /* =========================
          Back to Top
@@ -249,35 +207,14 @@ html.dark-mode .hover\:border-black:hover {
         .main-container { margin-top: 24px; }
         #scrollToTopBtn { right: 16px; bottom: 16px; }
       }
-
-      /* =========================
-   Dark Mode — Brighten inline-styled text
-   ========================= */
-html.dark-mode [style*="color: #4b5563"] { color: #d1d5db !important; }   /* description */
-html.dark-mode [style*="color: #6b7280"] { color: #9ca3af !important; }   /* section labels */
-html.dark-mode [style*="color: #111827"] { color: #f9fafb !important; }   /* score values */
-html.dark-mode [style*="color: #1f2937"] { color: #e5e7eb !important; }   /* comment body */
-html.dark-mode [style*="color: #9ca3af"] { color: #cbd5e1 !important; }   /* timestamps */
-
-
-/* Pulsing Live Dot for Airing Anime */
-.status-dot {
-  height: 6px;
-  width: 6px;
-  background-color: #ef4444; /* red-500 */
-  border-radius: 50%;
-  display: inline-block;
-  margin-right: 5px;
-  box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7);
-  animation: pulse-red 2s infinite;
-}
-
-@keyframes pulse-red {
-  0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); }
-  70% { transform: scale(1); box-shadow: 0 0 0 4px rgba(239, 68, 68, 0); }
-  100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
-}
-
+      
+      /* Dark Mode Fixes */
+      html.dark-mode .border-gray-200 { border-color: #374151; }
+      html.dark-mode .text-gray-600 { color: #9ca3af; }
+      html.dark-mode .bg-gray-100 { background-color: #1f2937; }
+      html.dark-mode [style*="color: #4b5563"] { color: #d1d5db !important; }
+      html.dark-mode [style*="color: #6b7280"] { color: #9ca3af !important; }
+      html.dark-mode [style*="color: #111827"] { color: #f9fafb !important; }
     </style>
   </head>
 
@@ -289,23 +226,23 @@ html.dark-mode [style*="color: #9ca3af"] { color: #cbd5e1 !important; }   /* tim
         <%= link_to "Anime Tracker", root_path, class: "site-title" %>
         <div class="nav-links">
           <% if Current.user %>
-            
-
             <%= link_to "Add Anime", new_anime_path %>
-
-
+            
+            <!-- NEW: Admin Badge added to the user link -->
             <%= link_to Current.user, style: "display: inline-flex; align-items: center; gap: 8px; text-decoration: none; color: inherit;" do %>
-  <div style="width: 26px; height: 26px; border-radius: 50%; overflow: hidden; background: #e5e7eb; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: bold; color: #374151;">
-    <% if Current.user.avatar_data.present? %>
-      <%= image_tag Current.user.avatar_data, style: "width: 100%; height: 100%; object-fit: cover;" %>
-    <% else %>
-      <%= Current.user.initial %>
-    <% end %>
-  </div>
-  <span class="nav-user"><%= Current.user.name %></span>
-<% end %>
-
-
+              <div style="width: 24px; height: 24px; border-radius: 50%; overflow: hidden; background: #e5e7eb; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: bold; color: #374151;">
+                <% if Current.user.avatar_data.present? %>
+                  <%= image_tag Current.user.avatar_data, style: "width: 100%; height: 100%; object-fit: cover;" %>
+                <% else %>
+                  <%= Current.user.initial %>
+                <% end %>
+              </div>
+              <span class="nav-user"><%= Current.user.name %></span>
+              <% if Current.user.admin? %>
+                <span style="background: #dbeafe; color: #1e40af; font-size: 10px; font-weight: bold; padding: 2px 6px; border-radius: 4px; text-transform: uppercase; letter-spacing: 0.05em; border: 1px solid #bfdbfe;">Admin</span>
+              <% end %>
+            <% end %>
+            <!-- END NEW -->
 
             <%= button_to "Log out", session_path, method: :delete, form: { style: "margin: 0;" } %>
           <% else %>
@@ -327,7 +264,9 @@ html.dark-mode [style*="color: #9ca3af"] { color: #cbd5e1 !important; }   /* tim
       <% end %>
       <%= yield %>
     </main>
-        <footer style="margin-top: 4rem; padding: 2rem 1rem; border-top: 1px solid #e5e7eb; text-align: center;">
+
+    <!-- Footer -->
+    <footer style="margin-top: 4rem; padding: 2rem 1rem; border-top: 1px solid #e5e7eb; text-align: center;">
       <p style="font-size: 0.75rem; color: #9ca3af; margin: 0;">
         <%= link_to "About", about_path, style: "color: inherit; text-decoration: none;" %>
         &nbsp;·&nbsp;
@@ -336,15 +275,13 @@ html.dark-mode [style*="color: #9ca3af"] { color: #cbd5e1 !important; }   /* tim
         © <%= Time.current.year %> Anime Tracker
       </p>
     </footer>
+
     <!-- Back to Top Button -->
     <button id="scrollToTopBtn" type="button" aria-label="Back to top" title="Back to top">▲</button>
 
     <!-- JavaScript -->
     <script>
       (function () {
-        // =========================
-        // Dark Mode
-        // =========================
         function updateThemeButton() {
           const btn = document.getElementById("theme-toggle");
           if (!btn) return;
@@ -362,19 +299,22 @@ html.dark-mode [style*="color: #9ca3af"] { color: #cbd5e1 !important; }   /* tim
           updateThemeButton();
         }
 
-        // Event delegation: survives Turbo navigations
         document.addEventListener("click", function (e) {
-          const btn = e.target.closest("#theme-toggle");
-          if (!btn) return;
-          const html = document.documentElement;
-          html.classList.toggle("dark-mode");
-          localStorage.setItem("theme", html.classList.contains("dark-mode") ? "dark" : "light");
-          updateThemeButton();
+          const themeBtn = e.target.closest("#theme-toggle");
+          if (themeBtn) {
+            const html = document.documentElement;
+            html.classList.toggle("dark-mode");
+            localStorage.setItem("theme", html.classList.contains("dark-mode") ? "dark" : "light");
+            updateThemeButton();
+            return;
+          }
+
+          const scrollBtn = e.target.closest("#scrollToTopBtn");
+          if (scrollBtn) {
+            window.scrollTo({ top: 0, behavior: "smooth" });
+          }
         });
 
-        // =========================
-        // Back to Top
-        // =========================
         function updateScrollButton() {
           const btn = document.getElementById("scrollToTopBtn");
           if (!btn) return;
@@ -382,17 +322,8 @@ html.dark-mode [style*="color: #9ca3af"] { color: #cbd5e1 !important; }   /* tim
           else btn.classList.remove("visible");
         }
 
-        document.addEventListener("click", function (e) {
-          const btn = e.target.closest("#scrollToTopBtn");
-          if (!btn) return;
-          window.scrollTo({ top: 0, behavior: "smooth" });
-        });
-
         window.addEventListener("scroll", updateScrollButton, { passive: true });
 
-        // =========================
-        // Run on initial load + Turbo navigations
-        // =========================
         function init() {
           applySavedTheme();
           updateScrollButton();
