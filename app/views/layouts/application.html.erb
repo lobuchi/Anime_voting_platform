@@ -207,6 +207,18 @@
         .main-container { margin-top: 24px; }
         #scrollToTopBtn { right: 16px; bottom: 16px; }
       }
+
+
+            /* Custom Text Selection Colors */
+      ::selection {
+        background-color: #3b82f6; /* Tailwind blue-500 */
+        color: #ffffff;
+      }
+
+      html.dark-mode ::selection {
+        background-color: #fbbf24; /* Tailwind amber-400 */
+        color: #111827;
+      }
       
       /* Dark Mode Fixes */
       html.dark-mode .border-gray-200 { border-color: #374151; }

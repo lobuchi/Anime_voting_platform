@@ -43,7 +43,6 @@
 
     <%= form_with url: animes_path, method: :get, class: "mb-6" do |f| %>
       <div class="flex gap-2">
-        <!-- ADDED id="search-input" HERE -->
         <%= f.text_field :q, id: "search-input", value: params[:q], placeholder: "Find your next anime... (Press / to focus)", autocomplete: "off", autofocus: true, class: "flex-grow border border-gray-300 p-3 focus:outline-none focus:border-black" %>
         <%= f.submit "Search", class: "border border-black px-6 py-3 font-bold cursor-pointer hover:bg-black hover:text-white transition-colors" %>
       </div>
@@ -66,9 +65,10 @@
                 #<%= index + 1 %>
               </div>
 
+              <!-- NEW: Added transition-transform and group-hover:scale-105 -->
               <div class="w-24 h-32 shrink-0 border border-gray-100 overflow-hidden">
                 <% if anime.image_data.present? %>
-                  <%= image_tag anime.image_data, class: "w-full h-full object-cover" %>
+                  <%= image_tag anime.image_data, class: "w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" %>
                 <% else %>
                   <div class="bg-gray-100 w-full h-full flex items-center justify-center text-xs text-gray-400">No Image</div>
                 <% end %>
@@ -135,10 +135,9 @@
   </aside>
 </div>
 
-<!-- ADDED: Press '/' to focus search -->
+<!-- Press '/' to focus search -->
 <script>
   document.addEventListener('keydown', function(e) {
-    // If user presses '/' and is not already typing in an input
     if (e.key === '/' && document.activeElement.tagName !== 'INPUT' && document.activeElement.tagName !== 'TEXTAREA') {
       e.preventDefault();
       const searchInput = document.getElementById('search-input');
