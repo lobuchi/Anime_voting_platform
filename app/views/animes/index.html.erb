@@ -44,14 +44,15 @@
     <%= form_with url: animes_path, method: :get, class: "mb-6" do |f| %>
       <div class="flex gap-2">
         <%= f.text_field :q, id: "search-input", value: params[:q], placeholder: "Find your next anime... (Press / to focus)", autocomplete: "off", autofocus: true, class: "flex-grow border border-gray-300 p-3 focus:outline-none focus:border-black" %>
-        <%= f.submit "Search", class: "border border-black px-6 py-3 font-bold cursor-pointer hover:bg-black hover:text-white transition-colors" %>
+        <%= f.submit "Search", class: "border border-black px-6 py-3 font-bold cursor-pointer hover:bg-black hover:text-white hover:shadow-md transition-all" %>
       </div>
     <% end %>
 
     <% if @animes.any? %>
       <div class="flex flex-col space-y-6">
         <% @animes.each_with_index do |anime, index| %>
-          <%= link_to anime, class: "group block border border-gray-200 p-4 hover:border-black transition-colors" do %>
+          <!-- NEW: The 'Lift' Effect classes (hover:shadow-lg hover:-translate-y-1 transition-all) -->
+          <%= link_to anime, class: "group block border border-gray-200 dark:border-gray-700 p-4 bg-white dark:bg-gray-800 hover:border-black dark:hover:border-gray-500 hover:shadow-lg hover:-translate-y-1 transition-all duration-200" do %>
             <div class="flex items-center space-x-6">
               
               <!-- Medal Colors for Top 3 -->
@@ -65,12 +66,15 @@
                 #<%= index + 1 %>
               </div>
 
-              <!-- NEW: Added transition-transform and group-hover:scale-105 -->
               <div class="w-24 h-32 shrink-0 border border-gray-100 overflow-hidden">
                 <% if anime.image_data.present? %>
                   <%= image_tag anime.image_data, class: "w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" %>
                 <% else %>
-                  <div class="bg-gray-100 w-full h-full flex items-center justify-center text-xs text-gray-400">No Image</div>
+                  <!-- NEW: Nicer "No Image" placeholder with an emoji -->
+                  <div class="bg-gray-100 dark:bg-gray-700 w-full h-full flex flex-col items-center justify-center text-gray-400">
+                    <span class="text-2xl mb-1">🖼️</span>
+                    <span class="text-[10px] uppercase tracking-wider font-bold">No Image</span>
+                  </div>
                 <% end %>
               </div>
               <div class="flex-grow">
