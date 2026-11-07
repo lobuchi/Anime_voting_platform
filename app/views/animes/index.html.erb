@@ -43,16 +43,17 @@
 
     <%= form_with url: animes_path, method: :get, class: "mb-6" do |f| %>
       <div class="flex gap-2">
-        <%= f.text_field :q, id: "search-input", value: params[:q], placeholder: "Find your next anime... (Press / to focus)", autocomplete: "off", autofocus: true, class: "flex-grow border border-gray-300 p-3 focus:outline-none focus:border-black" %>
-        <%= f.submit "Search", class: "border border-black px-6 py-3 font-bold cursor-pointer hover:bg-black hover:text-white hover:shadow-md transition-all" %>
+        <%= f.text_field :q, id: "search-input", value: params[:q], placeholder: "Find your next anime... (Press / to focus)", autocomplete: "off", autofocus: true, class: "flex-grow border border-gray-300 p-3 focus:outline-none focus:border-black dark:bg-gray-800 dark:text-white dark:border-gray-600" %>
+        <%= f.submit "Search", class: "border border-black dark:border-white px-6 py-3 font-bold cursor-pointer hover:bg-black dark:hover:bg-white hover:text-white dark:hover:text-black transition-all" %>
       </div>
     <% end %>
 
     <% if @animes.any? %>
       <div class="flex flex-col space-y-6">
         <% @animes.each_with_index do |anime, index| %>
-          <!-- NEW: The 'Lift' Effect classes (hover:shadow-lg hover:-translate-y-1 transition-all) -->
-          <%= link_to anime, class: "group block border border-gray-200 dark:border-gray-700 p-4 bg-white dark:bg-gray-800 hover:border-black dark:hover:border-gray-500 hover:shadow-lg hover:-translate-y-1 transition-all duration-200" do %>
+          
+          <!-- ADDED text-black dark:text-white to make text always visible -->
+          <%= link_to anime, class: "group block border border-gray-200 dark:border-gray-700 p-4 bg-white dark:bg-gray-800 text-black dark:text-white hover:border-black dark:hover:border-gray-400 hover:shadow-lg hover:-translate-y-1 transition-all duration-200" do %>
             <div class="flex items-center space-x-6">
               
               <!-- Medal Colors for Top 3 -->
@@ -66,12 +67,12 @@
                 #<%= index + 1 %>
               </div>
 
-              <div class="w-24 h-32 shrink-0 border border-gray-100 overflow-hidden">
+              <div class="w-24 h-32 shrink-0 border border-gray-100 dark:border-gray-700 overflow-hidden">
                 <% if anime.image_data.present? %>
                   <%= image_tag anime.image_data, class: "w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" %>
                 <% else %>
-                  <!-- NEW: Nicer "No Image" placeholder with an emoji -->
-                  <div class="bg-gray-100 dark:bg-gray-700 w-full h-full flex flex-col items-center justify-center text-gray-400">
+                  <!-- Nicer "No Image" placeholder -->
+                  <div class="bg-gray-100 dark:bg-gray-700 w-full h-full flex flex-col items-center justify-center text-gray-400 dark:text-gray-500">
                     <span class="text-2xl mb-1">🖼️</span>
                     <span class="text-[10px] uppercase tracking-wider font-bold">No Image</span>
                   </div>
@@ -91,8 +92,9 @@
 
                 </div>
                 <div class="mt-2 flex items-center gap-2 flex-wrap">
-                  <div class="text-sm text-gray-600 border border-gray-200 inline-block px-3 py-1">⭐ <strong><%= anime.score || 0 %></strong></div>
-                  <div class="text-sm text-gray-600 border border-gray-200 inline-block px-3 py-1">💬 <strong><%= anime.comments.count %></strong></div>
+                  <!-- Explicit dark mode text color for these boxes -->
+                  <div class="text-sm text-gray-600 dark:text-gray-300 border border-gray-200 dark:border-gray-600 inline-block px-3 py-1">⭐ <strong><%= anime.score || 0 %></strong></div>
+                  <div class="text-sm text-gray-600 dark:text-gray-300 border border-gray-200 dark:border-gray-600 inline-block px-3 py-1">💬 <strong><%= anime.comments.count %></strong></div>
                 </div>
               </div>
             </div>
