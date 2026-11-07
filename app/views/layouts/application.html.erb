@@ -9,9 +9,8 @@
     <%= csp_meta_tag %>
     <%= yield :head %>
 
-    <link rel="icon" href="/icon.png" type="image/png">
-    <link rel="icon" href="/icon.svg" type="image/svg+xml">
-    <link rel="apple-touch-icon" href="/icon.png">
+    <!-- Emoji Favicon -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📺</text></svg>">
 
     <%= stylesheet_link_tag "tailwind", "data-turbo-track": "reload" %>
     <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
@@ -42,6 +41,40 @@
       html.dark-mode body {
         background: #111827;
         color: #ffffff;
+      }
+
+      /* Custom Sleek Scrollbar */
+      ::-webkit-scrollbar {
+        width: 10px;
+      }
+      ::-webkit-scrollbar-track {
+        background: #f3f4f6;
+      }
+      html.dark-mode ::-webkit-scrollbar-track {
+        background: #111827;
+      }
+      ::-webkit-scrollbar-thumb {
+        background: #d1d5db;
+        border-radius: 5px;
+      }
+      html.dark-mode ::-webkit-scrollbar-thumb {
+        background: #374151;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: #9ca3af;
+      }
+      html.dark-mode ::-webkit-scrollbar-thumb:hover {
+        background: #4b5563;
+      }
+
+      /* Custom Text Selection Colors */
+      ::selection {
+        background-color: #3b82f6; /* blue-500 */
+        color: #ffffff;
+      }
+      html.dark-mode ::selection {
+        background-color: #fbbf24; /* amber-400 */
+        color: #111827;
       }
 
       /* =========================
@@ -207,20 +240,8 @@
         .main-container { margin-top: 24px; }
         #scrollToTopBtn { right: 16px; bottom: 16px; }
       }
-
-
-            /* Custom Text Selection Colors */
-      ::selection {
-        background-color: #3b82f6; /* Tailwind blue-500 */
-        color: #ffffff;
-      }
-
-      html.dark-mode ::selection {
-        background-color: #fbbf24; /* Tailwind amber-400 */
-        color: #111827;
-      }
       
-      /* Dark Mode Fixes */
+      /* Dark Mode Utility Overrides */
       html.dark-mode .border-gray-200 { border-color: #374151; }
       html.dark-mode .text-gray-600 { color: #9ca3af; }
       html.dark-mode .bg-gray-100 { background-color: #1f2937; }
@@ -240,7 +261,7 @@
           <% if Current.user %>
             <%= link_to "Add Anime", new_anime_path %>
             
-            <!-- NEW: Admin Badge added to the user link -->
+            <!-- User Avatar & Admin Badge -->
             <%= link_to Current.user, style: "display: inline-flex; align-items: center; gap: 8px; text-decoration: none; color: inherit;" do %>
               <div style="width: 24px; height: 24px; border-radius: 50%; overflow: hidden; background: #e5e7eb; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: bold; color: #374151;">
                 <% if Current.user.avatar_data.present? %>
@@ -254,7 +275,6 @@
                 <span style="background: #dbeafe; color: #1e40af; font-size: 10px; font-weight: bold; padding: 2px 6px; border-radius: 4px; text-transform: uppercase; letter-spacing: 0.05em; border: 1px solid #bfdbfe;">Admin</span>
               <% end %>
             <% end %>
-            <!-- END NEW -->
 
             <%= button_to "Log out", session_path, method: :delete, form: { style: "margin: 0;" } %>
           <% else %>
@@ -311,6 +331,7 @@
           updateThemeButton();
         }
 
+        // Event delegation ensures buttons work after Turbo page swaps
         document.addEventListener("click", function (e) {
           const themeBtn = e.target.closest("#theme-toggle");
           if (themeBtn) {
