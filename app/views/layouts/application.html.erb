@@ -25,7 +25,7 @@
 
     <style>
       /* =========================
-         Base
+         Base & Animations
          ========================= */
       * { box-sizing: border-box; }
       html { scroll-behavior: smooth; }
@@ -41,6 +41,22 @@
       html.dark-mode body {
         background: #111827;
         color: #ffffff;
+      }
+
+      /* NEW: Page Fade-In Animation */
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(8px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .animate-fade-in {
+        animation: fadeIn 0.4s ease-out forwards;
       }
 
       /* Custom Sleek Scrollbar */
@@ -187,8 +203,8 @@
       </div>
     </nav>
 
-    <!-- Main Content -->
-    <main class="main-container">
+    <!-- Main Content (Added animate-fade-in) -->
+    <main class="main-container animate-fade-in">
       <% if notice %>
         <div class="flash-message"><%= notice %></div>
       <% end %>
@@ -249,12 +265,12 @@
           }
         });
 
-        // NEW: Press 'd' to toggle Dark Mode
+        // Press 'd' to toggle Dark Mode
         document.addEventListener("keydown", function(e) {
           if (e.key === "d" && document.activeElement.tagName !== "INPUT" && document.activeElement.tagName !== "TEXTAREA") {
             e.preventDefault();
             const themeBtn = document.getElementById("theme-toggle");
-            if (themeBtn) themeBtn.click(); // Reuse the existing click logic!
+            if (themeBtn) themeBtn.click();
           }
         });
 
