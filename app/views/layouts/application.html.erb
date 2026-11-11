@@ -43,20 +43,30 @@
         color: #ffffff;
       }
 
-      /* NEW: Page Fade-In Animation */
+      /* Page Fade-In Animation */
       @keyframes fadeIn {
-        from {
-          opacity: 0;
-          transform: translateY(8px);
-        }
-        to {
-          opacity: 1;
-          transform: translateY(0);
-        }
+        from { opacity: 0; transform: translateY(8px); }
+        to { opacity: 1; transform: translateY(0); }
       }
-
       .animate-fade-in {
         animation: fadeIn 0.4s ease-out forwards;
+      }
+
+      /* =========================
+         NEW: Scroll Progress Bar
+         ========================= */
+      #progress-bar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 3px;
+        background: #3b82f6; /* blue-500 */
+        width: 0%;
+        z-index: 10000; /* Above everything */
+        transition: width 0.1s ease;
+      }
+      html.dark-mode #progress-bar {
+        background: #fbbf24; /* amber-400 */
       }
 
       /* Custom Sleek Scrollbar */
@@ -170,6 +180,9 @@
 
   <body>
 
+    <!-- NEW: Scroll Progress Bar -->
+    <div id="progress-bar"></div>
+
     <!-- Navigation -->
     <nav class="navbar">
       <div class="navbar-container">
@@ -203,7 +216,7 @@
       </div>
     </nav>
 
-    <!-- Main Content (Added animate-fade-in) -->
+    <!-- Main Content -->
     <main class="main-container animate-fade-in">
       <% if notice %>
         <div class="flash-message"><%= notice %></div>
@@ -281,11 +294,27 @@
           else btn.classList.remove("visible");
         }
 
-        window.addEventListener("scroll", updateScrollButton, { passive: true });
+        // NEW: Scroll Progress Bar Logic
+        function updateProgressBar() {
+          const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+          const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+          const scrolled = (winScroll / height) * 100;
+          const progressBar = document.getElementById("progress-bar");
+          if (progressBar) {
+            progressBar.style.width = scrolled + "%";
+          }
+        }
+
+        // Attach scroll listener for both buttons
+        window.addEventListener("scroll", function() {
+          updateScrollButton();
+          updateProgressBar();
+        }, { passive: true });
 
         function init() {
           applySavedTheme();
           updateScrollButton();
+          updateProgressBar();
         }
 
         document.addEventListener("DOMContentLoaded", init);
