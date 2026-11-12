@@ -148,7 +148,208 @@
         <p style="margin-bottom: 2rem; color: #6b7280;"><%= link_to "Login", new_session_path, style: "text-decoration: underline; color: inherit;" %> to add a comment.</p>
       <% end %>
 
+      <div style="display: flex; flex-direction: column; gap: 1.5<div style="max-width: 64rem; margin-left: auto; margin-right: auto; display: flex; flex-direction: row; gap: 2.5rem;">
+  <!-- Left Side: Image and Basic Info -->
+  <div style="width: 33.333333%; display: flex; flex-direction: column; gap: 1rem;">
+    <% if @anime.image_data.present? %>
+      <%= image_tag @anime.image_data, style: "width: 100%; border: 1px solid #e5e7eb;" %>
+    <% else %>
+      <div style="background-color: #f3f4f6; aspect-ratio: 3 / 4; display: flex; align-items: center; justify-content: center; border: 1px solid #e5e7eb; color: #6b7280;">No Image</div>
+    <% end %>
+
+    <div style="padding-top: 1rem; border-top: 1px solid #e5e7eb;">
+      <h3 style="font-size: 0.875rem; text-transform: uppercase; letter-spacing: 0.05em; color: #6b7280; margin-bottom: 0.5rem; margin-top: 0;">Current Score</h3>
+      <div style="font-size: 1.5rem; font-weight: 700; color: #111827;"><%= @anime.score || 0 %></div>
+    </div>
+
+    <!-- Watch Status -->
+    <% if Current.user %>
+      <div style="padding-top: 1rem; border-top: 1px solid #e5e7eb;">
+        <h3 style="font-size: 0.875rem; text-transform: uppercase; letter-spacing: 0.05em; color: #6b7280; margin-bottom: 0.5rem; margin-top: 0;">Your Status</h3>
+
+        <% if @watch_status %>
+          <div style="margin-bottom: 0.5rem;">
+            <span class="<%= @watch_status.color_classes %>" style="display: inline-block; padding: 0.25rem 0.75rem; border: 1px solid; border-radius: 4px; font-size: 0.875rem; font-weight: 600;">
+              <%= @watch_status.label %>
+            </span>
+          </div>
+        <% end %>
+
+        <div style="display: flex; flex-wrap: wrap; gap: 0.25rem;">
+          <% WatchStatus.statuses.keys.each do |s| %>
+            <% active = @watch_status&.status == s %>
+            <%= button_to (active ? "✓ " : "") + s.titleize,
+                  anime_watch_status_path(@anime, status: s),
+                  method: active ? :delete : (@watch_status ? :patch : :post),
+                  form: { style: "margin: 0;" },
+                  style: "padding: 0.25rem 0.6rem; font-size: 0.75rem; border-radius: 4px; cursor: pointer; border: 1px solid #d1d5db; #{active ? 'background:#111827;color:#fff;' : 'background:#fff;color:#374151;'}" %>
+          <% end %>
+        </div>
+      </div>
+    <% end %>
+
+    <!-- Voting Section -->
+    <div style="padding-top: 1rem; border-top: 1px solid #e5e7eb;">
+      <% if Current.user %>
+        <div style="display: flex; gap: 0.75rem; width: 100%;">
+
+          <% if @vote&.value&.positive? %>
+            <%= button_to "▲ Voted +1", anime_vote_path(@anime, @vote),
+                  method: :delete,
+                  form: { style: "flex: 1 1 0%; margin: 0;" },
+                  style: "width: 100%; box-sizing: border-box; border: 1px solid #16a34a; background: #16a34a; color: #fff; font-weight: 600; padding: 0.5rem; cursor: pointer; border-radius: 4px; font-size: 0.875rem;" %>
+            <%= button_to "▼ -1", anime_votes_path(@anime, score: -1),
+                  method: :post,
+                  form: { style: "flex: 1 1 0%; margin: 0;" },
+                  style: "width: 100%; box-sizing: border-box; border: 1px solid #dc2626; background: #fef2f2; color: #b91c1c; font-weight: 600; padding: 0.5rem; cursor: pointer; border-radius: 4px; font-size: 0.875rem;" %>
+
+          <% elsif @vote&.value&.negative? %>
+            <%= button_to "▲ +1", anime_votes_path(@anime, score: 1),
+                  method: :post,
+                  form: { style: "flex: 1 1 0%; margin: 0;" },
+                  style: "width: 100%; box-sizing: border-box; border: 1px solid #16a34a; background: #f0fdf4; color: #15803d; font-weight: 600; padding: 0.5rem; cursor: pointer; border-radius: 4px; font-size: 0.875rem;" %>
+            <%= button_to "▼ Voted -1", anime_vote_path(@anime, @vote),
+                  method: :delete,
+                  form: { style: "flex: 1 1 0%; margin: 0;" },
+                  style: "width: 100%; box-sizing: border-box; border: 1px solid #dc2626; background: #dc2626; color: #fff; font-weight: 600; padding: 0.5rem; cursor: pointer; border-radius: 4px; font-size: 0.875rem;" %>
+
+          <% else %>
+            <%= button_to "▲ +1", anime_votes_path(@anime, score: 1),
+                  method: :post,
+                  form: { style: "flex: 1 1 0%; margin: 0;" },
+                  style: "width: 100%; box-sizing: border-box; border: 1px solid #16a34a; background: #f0fdf4; color: #15803d; font-weight: 600; padding: 0.5rem; cursor: pointer; border-radius: 4px; font-size: 0.875rem;" %>
+            <%= button_to "▼ -1", anime_votes_path(@anime, score: -1),
+                  method: :post,
+                  form: { style: "flex: 1 1 0%; margin: 0;" },
+                  style: "width: 100%; box-sizing: border-box; border: 1px solid #dc2626; background: #fef2f2; color: #b91c1c; font-weight: 600; padding: 0.5rem; cursor: pointer; border-radius: 4px; font-size: 0.875rem;" %>
+          <% end %>
+
+        </div>
+      <% else %>
+        <p style="font-size: 0.875rem; color: #6b7280; margin: 0;"><%= link_to "Login to vote", new_session_path, style: "text-decoration: underline; color: inherit;" %></p>
+      <% end %>
+    </div>
+
+    <!-- Delete option for Admin -->
+    <% if Current.user&.admin? %>
+      <div style="padding-top: 2rem; text-align: center; border-top: 1px solid #e5e7eb; font-size: 0.875rem;">
+        <%= button_to "Delete Anime (Admin)", anime_path(@anime),
+              method: :delete,
+              data: { turbo_confirm: "Are you sure?" },
+              style: "background: none; border: none; color: #dc2626; text-decoration: underline; cursor: pointer; padding: 0;" %>
+      </div>
+    <% end %>
+  </div>
+
+  <!-- Right Side: Details, Trailer, Comments -->
+  <div style="width: 66.666667%; display: flex; flex-direction: column; gap: 2.5rem;">
+    <div style="display: flex; flex-direction: column; gap: 1rem;">
+      
+      <!-- TITLE & BADGES -->
+      <div style="display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap;">
+        <h1 style="font-size: 2.25rem; font-weight: 900; letter-spacing: -0.025em; margin: 0;"><%= @anime.title %></h1>
+
+        <span class="<%= @anime.airing_status_classes %>" style="display: inline-block; padding: 0.2rem 0.75rem; border: 1px solid; border-radius: 4px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em;">
+          <%= @anime.airing_status_label %>
+        </span>
+
+        <!-- NEW: Share Button -->
+        <button onclick="copyLink(this)" style="background: none; border: 1px solid #d1d5db; padding: 0.25rem 0.6rem; border-radius: 4px; font-size: 0.75rem; font-weight: bold; cursor: pointer; color: #6b7280; display: flex; align-items: center; gap: 4px; transition: background 0.2s;" class="hover:bg-gray-100 dark:hover:bg-gray-700">
+          🔗 Share
+        </button>
+      </div>
+
+      <!-- Description Section -->
+      <% if @anime.description.present? %>
+        <p style="color: #4b5563; font-size: 1rem; line-height: 1.6; margin: 0; white-space: pre-line;"><%= @anime.description %></p>
+      <% end %>
+    </div>
+
+    <!-- Trailer -->
+    <% if @anime.trailer_url.present? %>
+      <div style="border: 1px solid #e5e7eb; padding: 0.25rem;">
+        <div style="aspect-ratio: 16 / 9; width: 100%;">
+          <iframe
+            src="<%= @anime.trailer_url.gsub("watch?v=", "embed/") %>"
+            title="YouTube video player"
+            frameborder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen
+            style="width: 100%; height: 100%; border: none;">
+          </iframe>
+        </div>
+      </div>
+    <% end %>
+
+    <!-- Comments -->
+    <div style="border-top: 1px solid #e5e7eb; padding-top: 2rem;">
+      <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1.5rem; margin-top: 0;">Comments</h2>
+
+      <% if Current.user %>
+        <%= form_with(model: [@anime, Comment.new], html: { style: "margin-bottom: 2rem; display: flex; flex-direction: column; align-items: flex-end;" }) do |f| %>
+          <%= f.text_area :content, rows: 3, style: "width: 100%; border: 1px solid #d1d5db; padding: 0.75rem; margin-bottom: 0.5rem; box-sizing: border-box;", placeholder: "Share your thoughts..." %>
+          <%= f.submit "Post Comment", style: "border: 1px solid #000; background: #fff; color: #000; padding: 0.5rem 1.5rem; cursor: pointer;" %>
+        <% end %>
+      <% else %>
+        <p style="margin-bottom: 2rem; color: #6b7280;"><%= link_to "Login", new_session_path, style: "text-decoration: underline; color: inherit;" %> to add a comment.</p>
+      <% end %>
+
       <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+        <% @comments.each do |comment| %>
+          <div style="border-bottom: 1px solid #f3f4f6; padding-bottom: 1rem;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+              
+              <!-- NEW: Avatar next to commenter name -->
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <div style="width: 24px; height: 24px; border-radius: 50%; overflow: hidden; background: #e5e7eb; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: bold; color: #374151;">
+                  <% if comment.user.avatar_data.present? %>
+                    <%= image_tag comment.user.avatar_data, style: "width: 100%; height: 100%; object-fit: cover;" %>
+                  <% else %>
+                    <%= comment.user.initial %>
+                  <% end %>
+                </div>
+                <%= link_to comment.user.name, comment.user, style: "font-weight: 700; font-size: 0.875rem; text-decoration: none; color: inherit;" %>
+              </div>
+              
+              <span style="font-size: 0.75rem; color: #9ca3af;"><%= time_ago_in_words(comment.created_at) %> ago</span>
+            </div>
+            <p style="color: #1f2937; margin: 0; padding-left: 2rem;"><%= comment.content %></p>
+            
+            <% if Current.user == comment.user || Current.user&.admin? %>
+              <div style="margin-top: 0.5rem; text-align: right;">
+                <%= button_to "Delete", anime_comment_path(@anime, comment),
+                      method: :delete,
+                      data: { turbo_confirm: "Delete comment?" },
+                      style: "background: none; border: none; font-size: 0.75rem; color: #ef4444; text-decoration: underline; cursor: pointer; padding: 0;" %>
+              </div>
+            <% end %>
+          </div>
+        <% end %>
+        <% if @comments.empty? %>
+          <p style="color: #9ca3af; font-size: 0.875rem; margin: 0;">No comments yet.</p>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- JavaScript for the Share Button -->
+<script>
+  function copyLink(btn) {
+    navigator.clipboard.writeText(window.location.href).then(() => {
+      const originalText = btn.innerHTML;
+      btn.innerHTML = "✅ Copied!";
+      btn.style.color = "#16a34a"; // Green text
+      btn.style.borderColor = "#16a34a";
+      
+      setTimeout(() => {
+        btn.innerHTML = originalText;
+        btn.style.color = "#6b7280"; // Reset to gray
+        btn.style.borderColor = "#d1d5db";
+      }, 2000);
+    });
+  }
+</script>rem;">
         <% @comments.each do |comment| %>
           <div style="border-bottom: 1px solid #f3f4f6; padding-bottom: 1rem;">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.25rem;">
