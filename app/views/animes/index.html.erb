@@ -3,15 +3,15 @@
 <!-- Standard 12-column grid: Left (3), Center (6), Right (3) -->
 <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 items-start px-4">
   
-  <!-- LEFT SIDEBAR (Top Airing from Kitsu) -->
-  <aside class="hidden lg:block lg:col-span-3 space-y-6">
-    <div class="border border-gray-200 dark:border-gray-700 p-5 rounded">
+  <!-- LEFT SIDEBAR (Top Airing from Kitsu) - MADE STICKY -->
+  <aside class="hidden lg:block lg:col-span-3 space-y-6 sticky top-6">
+    <div class="border border-gray-200 dark:border-gray-700 p-5 rounded bg-white dark:bg-gray-800">
       <h3 class="font-bold text-sm uppercase tracking-wider text-gray-500 mb-4">Top Airing</h3>
       <div class="space-y-4">
         <% if @top_airing.any? %>
           <% @top_airing.each do |anime| %>
             <a href="<%= anime["url"] %>" target="_blank" rel="noopener noreferrer" class="flex items-center gap-3 group hover:opacity-80 transition-opacity">
-              <div style="width: 48px; height: 64px; flex-shrink: 0;" class="border border-gray-200 dark:border-gray-600 overflow-hidden rounded bg-gray-100 dark:bg-gray-800">
+              <div style="width: 48px; height: 64px; flex-shrink: 0;" class="border border-gray-200 dark:border-gray-600 overflow-hidden rounded bg-gray-100 dark:bg-gray-700">
                  <% if anime["images"] && anime["images"]["jpg"] %>
                    <%= image_tag anime["images"]["jpg"]["image_url"], style: "width: 100%; height: 100%; object-fit: cover;", onerror: "this.src='https://placehold.co/100x150/1f2937/ffffff?text=No+Img';" %>
                  <% end %>
@@ -79,7 +79,7 @@
               <div class="flex-grow">
                 <div class="flex items-center gap-2">
                   
-                  <!-- NEW: Highlight search term here -->
+                  <!-- Highlight search term -->
                   <h2 class="text-xl font-bold group-hover:underline">
                     <% if params[:q].present? %>
                       <%= highlight(anime.title, params[:q]) %>
@@ -111,17 +111,15 @@
     <% end %>
   </main>
 
-  <!-- RIGHT SIDEBAR (Upcoming Only) -->
-  <aside class="hidden lg:block lg:col-span-3 space-y-6">
-    
-    <!-- Upcoming Releases -->
-    <div class="border border-gray-200 dark:border-gray-700 p-5 rounded">
+  <!-- RIGHT SIDEBAR (Upcoming Only) - MADE STICKY -->
+  <aside class="hidden lg:block lg:col-span-3 space-y-6 sticky top-6">
+    <div class="border border-gray-200 dark:border-gray-700 p-5 rounded bg-white dark:bg-gray-800">
       <h3 class="font-bold text-sm uppercase tracking-wider text-gray-500 mb-4">Upcoming</h3>
       <div class="space-y-4">
         <% if @upcoming_anime.any? %>
           <% @upcoming_anime.each do |anime| %>
             <a href="<%= anime["url"] %>" target="_blank" rel="noopener noreferrer" class="flex items-center gap-3 group hover:opacity-80 transition-opacity">
-              <div style="width: 48px; height: 64px; flex-shrink: 0;" class="border border-gray-200 dark:border-gray-600 overflow-hidden rounded bg-gray-100 dark:bg-gray-800">
+              <div style="width: 48px; height: 64px; flex-shrink: 0;" class="border border-gray-200 dark:border-gray-600 overflow-hidden rounded bg-gray-100 dark:bg-gray-700">
                  <% if anime["images"] && anime["images"]["jpg"] %>
                    <%= image_tag anime["images"]["jpg"]["image_url"], style: "width: 100%; height: 100%; object-fit: cover;", onerror: "this.src='https://placehold.co/100x150/1f2937/ffffff?text=No+Img';" %>
                  <% end %>
@@ -142,7 +140,6 @@
         <% end %>
       </div>
     </div>
-
   </aside>
 </div>
 
