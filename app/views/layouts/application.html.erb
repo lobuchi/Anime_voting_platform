@@ -43,6 +43,28 @@
         color: #ffffff;
       }
 
+      /* NEW: Skip to Content Link */
+      .skip-link {
+        position: absolute;
+        top: -100px;
+        left: 10px;
+        background: #3b82f6;
+        color: #ffffff;
+        padding: 10px 16px;
+        z-index: 10000;
+        text-decoration: none;
+        font-weight: bold;
+        border-radius: 0 0 4px 4px;
+        transition: top 0.2s ease;
+      }
+      .skip-link:focus {
+        top: 0;
+      }
+      html.dark-mode .skip-link {
+        background: #fbbf24;
+        color: #111827;
+      }
+
       /* Page Fade-In Animation */
       @keyframes fadeIn {
         from { opacity: 0; transform: translateY(8px); }
@@ -152,6 +174,9 @@
 
   <body>
 
+    <!-- NEW: Skip to Content Link -->
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
     <!-- Scroll Progress Bar -->
     <div id="progress-bar"></div>
 
@@ -188,8 +213,8 @@
       </div>
     </nav>
 
-    <!-- Main Content -->
-    <main class="main-container animate-fade-in">
+    <!-- Main Content (Added id for skip link) -->
+    <main id="main-content" class="main-container animate-fade-in">
       <% if notice %>
         <div class="flash-message"><%= notice %></div>
       <% end %>
@@ -206,7 +231,6 @@
         &nbsp;·&nbsp;
         <%= link_to "Privacy", privacy_path, style: "color: inherit; text-decoration: none;" %>
         &nbsp;·&nbsp;
-        <!-- NEW: GitHub Link -->
         <%= link_to "GitHub", "https://github.com/lobuchi", target: "_blank", rel: "noopener noreferrer", style: "color: inherit; text-decoration: none;" %>
         &nbsp;·&nbsp;
         © <%= Time.current.year %> Anime Tracker
