@@ -43,7 +43,7 @@
         color: #ffffff;
       }
 
-      /* NEW: Skip to Content Link */
+      /* Skip to Content Link */
       .skip-link {
         position: absolute;
         top: -100px;
@@ -174,7 +174,7 @@
 
   <body>
 
-    <!-- NEW: Skip to Content Link -->
+    <!-- Skip to Content Link -->
     <a href="#main-content" class="skip-link">Skip to main content</a>
 
     <!-- Scroll Progress Bar -->
@@ -213,7 +213,7 @@
       </div>
     </nav>
 
-    <!-- Main Content (Added id for skip link) -->
+    <!-- Main Content -->
     <main id="main-content" class="main-container animate-fade-in">
       <% if notice %>
         <div class="flash-message"><%= notice %></div>
@@ -316,6 +316,9 @@
         document.addEventListener("turbo:load", init);
       })();
     </script>
+
+    <!-- Console Easter Egg -->
+    <script>console.log("%c👋 Hi there! Looking under the hood? Let's connect: https://linkedin.com/in/lohit-uchil", "color: #3b82f6; font-size: 16px; font-weight: bold; padding: 10px;");</script>
 
   </body>
 </html>
