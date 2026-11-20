@@ -36,17 +36,28 @@
 
   <!-- CENTER (Main Content) -->
   <main class="lg:col-span-6 min-w-0">
+    
+    <!-- NEW: Dynamic Greeting -->
+    <div class="text-center mb-4">
+      <h2 class="text-lg font-bold text-gray-700 dark:text-gray-300">
+        <span id="dynamic-greeting">Hello</span>, <%= Current.user ? Current.user.name : "Guest" %>! 👋
+      </h2>
+    </div>
+
     <h1 class="text-3xl font-bold mb-2 text-center">Top Anime</h1>
     <p class="text-center text-sm text-gray-500 mb-8 pb-4 border-b border-gray-200 dark:border-gray-700">
       <%= pluralize(@animes.count, "anime") %> in the catalog
     </p>
 
-    <%= form_with url: animes_path, method: :get, class: "mb-6" do |f| %>
-      <div class="flex gap-2">
+    <div class="flex gap-2 mb-6">
+      <%= form_with url: animes_path, method: :get, class: "flex-grow flex gap-2" do |f| %>
         <%= f.text_field :q, id: "search-input", value: params[:q], placeholder: "Find your next anime... (Press / to focus)", autocomplete: "off", autofocus: true, class: "flex-grow border border-gray-300 p-3 focus:outline-none focus:border-black dark:bg-gray-800 dark:text-white dark:border-gray-600" %>
         <%= f.submit "Search", class: "border border-black dark:border-white px-6 py-3 font-bold cursor-pointer hover:bg-black dark:hover:bg-white hover:text-white dark:hover:text-black transition-all" %>
-      </div>
-    <% end %>
+      <% end %>
+      
+      <!-- Random Button -->
+      <%= link_to "🎲", random_anime_path, title: "Random Anime", class: "border border-gray-300 dark:border-gray-600 px-4 py-3 font-bold bg-white dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors flex items-center justify-center text-xl" %>
+    </div>
 
     <% if @animes.any? %>
       <div class="flex flex-col space-y-6">
@@ -143,13 +154,29 @@
   </aside>
 </div>
 
-<!-- Press '/' to focus search -->
+<!-- Press '/' to focus search & Dynamic Greeting -->
 <script>
+  // Search Shortcut
   document.addEventListener('keydown', function(e) {
     if (e.key === '/' && document.activeElement.tagName !== 'INPUT' && document.activeElement.tagName !== 'TEXTAREA') {
       e.preventDefault();
       const searchInput = document.getElementById('search-input');
       if (searchInput) searchInput.focus();
+    }
+  });
+
+  // NEW: Dynamic Greeting based on user's local time
+  document.addEventListener('DOMContentLoaded', function() {
+    const hour = new Date().getHours();
+    const greetingElement = document.getElementById('dynamic-greeting');
+    if (greetingElement) {
+      if (hour < 12) {
+        greetingElement.textContent = "Good morning";
+      } else if (hour < 18) {
+        greetingElement.textContent = "Good afternoon";
+      } else {
+        greetingElement.textContent = "Good evening";
+      }
     }
   });
 </script>
