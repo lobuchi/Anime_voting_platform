@@ -120,18 +120,23 @@
         </a>
       </div>
 
-      <!-- NEW: Read More Description Section -->
+      <!-- Read More Description Section with Reading Time -->
       <% if @anime.description.present? %>
         <div>
           <p id="anime-description" style="color: #4b5563; font-size: 1rem; line-height: 1.6; margin: 0; white-space: pre-line; display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden;">
             <%= @anime.description %>
           </p>
           
-          <% if @anime.description.length > 250 %>
-            <button id="read-more-btn" onclick="toggleReadMore()" style="margin-top: 0.5rem; background: none; border: none; color: #3b82f6; font-weight: bold; font-size: 0.875rem; cursor: pointer; padding: 0;">
-              Read More ↓
-            </button>
-          <% end %>
+          <div style="display: flex; align-items: center; gap: 1rem; margin-top: 0.5rem;">
+            <% if @anime.description.length > 250 %>
+              <button id="read-more-btn" onclick="toggleReadMore()" style="background: none; border: none; color: #3b82f6; font-weight: bold; font-size: 0.875rem; cursor: pointer; padding: 0;">
+                Read More ↓
+              </button>
+            <% end %>
+            
+            <!-- NEW: Reading Time Badge -->
+            <span id="reading-time" style="color: #9ca3af; font-size: 0.75rem; font-weight: 600;"></span>
+          </div>
         </div>
       <% end %>
     </div>
@@ -203,7 +208,7 @@
   </div>
 </div>
 
-<!-- JavaScript for Share & Read More -->
+<!-- JavaScript for Share, Read More, and Reading Time -->
 <script>
   function copyLink(btn) {
     navigator.clipboard.writeText(window.location.href).then(() => {
@@ -219,7 +224,6 @@
     });
   }
 
-  // NEW: Toggle Read More function
   function toggleReadMore() {
     const desc = document.getElementById('anime-description');
     const btn = document.getElementById('read-more-btn');
@@ -232,4 +236,20 @@
       btn.innerHTML = 'Show Less ↑';
     }
   }
+
+  // NEW: Calculate Reading Time
+  document.addEventListener('DOMContentLoaded', function() {
+    const desc = document.getElementById('anime-description');
+    const timeSpan = document.getElementById('reading-time');
+    
+    if (desc && timeSpan) {
+      const words = desc.innerText.trim().split(/\s+/).length;
+      // Average reading speed is ~200 words per minute
+      const readingTime = Math.ceil(words / 200); 
+      
+      if (words > 10) {
+        timeSpan.textContent = `⏱ ${readingTime} min read`;
+      }
+    }
+  });
 </script>
