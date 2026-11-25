@@ -102,7 +102,7 @@
         </a>
       </div>
 
-      <!-- Read More Description Section with Reading Time -->
+      <!-- Read More Description Section with Reading Time & TTS -->
       <% if @anime.description.present? %>
         <div>
           <p id="anime-description" style="color: #4b5563; font-size: 1rem; line-height: 1.6; margin: 0; white-space: pre-line; display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden;">
@@ -117,6 +117,11 @@
             <% end %>
             
             <span id="reading-time" style="color: #9ca3af; font-size: 0.75rem; font-weight: 600;"></span>
+
+            <!-- NEW: Text-to-Speech Button -->
+            <button id="tts-btn" style="background: none; border: 1px solid #d1d5db; padding: 0.1rem 0.5rem; border-radius: 4px; font-size: 0.75rem; font-weight: bold; cursor: pointer; color: #6b7280; display: flex; align-items: center; gap: 4px; transition: background 0.2s;" class="hover:bg-gray-100 dark:hover:bg-gray-700">
+              🔊 Listen
+            </button>
           </div>
         </div>
       <% end %>
@@ -146,9 +151,7 @@
 
       <div style="display: flex; flex-direction: column; gap: 1.5rem;">
         <% @comments.each do |comment| %>
-          <!-- NEW: Comment Anchors and Self-Highlighting -->
           <div id="comment-<%= comment.id %>" class="<%= 'bg-blue-50 dark:bg-gray-800 border-l-4 border-l-blue-500' if Current.user == comment.user %>" style="border-bottom: 1px solid #f3f4f6; padding: 0.75rem 1rem; border-radius: 4px; transition: background-color 0.3s;">
-            
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
               <div style="display: flex; align-items: center; gap: 8px;">
                 <div style="width: 24px; height: 24px; border-radius: 50%; overflow: hidden; background: #e5e7eb; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: bold; color: #374151;">
@@ -164,7 +167,6 @@
                 <% end %>
               </div>
               
-              <!-- NEW: Link to Comment Button -->
               <div style="display: flex; align-items: center; gap: 0.5rem;">
                 <span style="font-size: 0.75rem; color: #9ca3af;"><%= time_ago_in_words(comment.created_at) %> ago</span>
                 <button onclick="copyCommentLink(<%= comment.id %>, this)" style="background: none; border: none; cursor: pointer; color: #9ca3af; font-size: 0.75rem; padding: 0; transition: color 0.2s;" title="Copy link to comment">🔗</button>
@@ -212,7 +214,6 @@
   function toggleReadMore() {
     const desc = document.getElementById('anime-description');
     const btn = document.getElementById('read-more-btn');
-    
     if (desc.style.webkitLineClamp === 'unset') {
       desc.style.webkitLineClamp = '4';
       btn.innerHTML = 'Read More ↓';
@@ -236,7 +237,6 @@
     document.body.style.overflow = 'auto';
   }
 
-  // NEW: Copy Comment Link Function
   function copyCommentLink(id, btn) {
     const url = window.location.origin + window.location.pathname + "#comment-" + id;
     navigator.clipboard.writeText(url).then(() => {
@@ -245,8 +245,35 @@
     });
   }
 
+  // NEW: Text-to-Speech Logic
+  let isSpeaking = false;
+  const ttsBtn = document.getElementById('tts-btn');
+  if (ttsBtn) {
+    ttsBtn.addEventListener('click', function() {
+      if (isSpeaking) {
+        window.speechSynthesis.cancel();
+        isSpeaking = false;
+        ttsBtn.innerHTML = "🔊 Listen";
+        return;
+      }
+      
+      const text = document.getElementById('anime-description').innerText;
+      const utterance = new SpeechSynthesisUtterance(text);
+      // Optional: Set voice to English
+      utterance.lang = 'en-US';
+      
+      utterance.onend = function() {
+        isSpeaking = false;
+        ttsBtn.innerHTML = "🔊 Listen";
+      };
+      
+      window.speechSynthesis.speak(utterance);
+      isSpeaking = true;
+      ttsBtn.innerHTML = "⏹ Stop";
+    });
+  }
+
   document.addEventListener('DOMContentLoaded', function() {
-    // Reading Time Estimator
     const desc = document.getElementById('anime-description');
     const timeSpan = document.getElementById('reading-time');
     if (desc && timeSpan) {
@@ -255,13 +282,11 @@
       if (words > 10) timeSpan.textContent = `⏱ ${readingTime} min read`;
     }
 
-    // NEW: Scroll to comment & Highlight if URL has a hash
     if (window.location.hash.startsWith('#comment-')) {
       const el = document.querySelector(window.location.hash);
       if (el) {
         setTimeout(() => {
           el.scrollIntoView({ behavior: 'smooth', block: 'center' });
-          // Briefly highlight yellow to show the user where they landed
           el.style.backgroundColor = '#fef08a'; 
           setTimeout(() => el.style.backgroundColor = '', 2000);
         }, 100);
