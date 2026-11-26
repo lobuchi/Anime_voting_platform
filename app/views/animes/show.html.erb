@@ -93,9 +93,15 @@
           <%= @anime.airing_status_label %>
         </span>
 
+        <!-- Share Button -->
         <button onclick="copyLink(this)" style="background: none; border: 1px solid #d1d5db; padding: 0.25rem 0.6rem; border-radius: 4px; font-size: 0.75rem; font-weight: bold; cursor: pointer; color: #6b7280; display: flex; align-items: center; gap: 4px; transition: background 0.2s;" class="hover:bg-gray-100 dark:hover:bg-gray-700">
           🔗 Share
         </button>
+
+        <!-- NEW: Share on X (Twitter) Button -->
+        <a href="https://twitter.com/intent/tweet?text=Check+out+<%= @anime.title %>+on+Anime+Tracker!&url=<%= request.original_url %>" target="_blank" rel="noopener noreferrer" style="background: none; border: 1px solid #d1d5db; padding: 0.25rem 0.6rem; border-radius: 4px; font-size: 0.75rem; font-weight: bold; cursor: pointer; color: #6b7280; display: flex; align-items: center; gap: 4px; text-decoration: none; transition: background 0.2s;" class="hover:bg-gray-100 dark:hover:bg-gray-700">
+          𝕏 Post
+        </a>
 
         <a href="#comments-section" style="background: none; border: 1px solid #d1d5db; padding: 0.25rem 0.6rem; border-radius: 4px; font-size: 0.75rem; font-weight: bold; cursor: pointer; color: #6b7280; display: flex; align-items: center; gap: 4px; text-decoration: none; transition: background 0.2s;" class="hover:bg-gray-100 dark:hover:bg-gray-700">
           💬 Comments (<%= @comments.count %>)
@@ -118,7 +124,6 @@
             
             <span id="reading-time" style="color: #9ca3af; font-size: 0.75rem; font-weight: 600;"></span>
 
-            <!-- NEW: Text-to-Speech Button -->
             <button id="tts-btn" style="background: none; border: 1px solid #d1d5db; padding: 0.1rem 0.5rem; border-radius: 4px; font-size: 0.75rem; font-weight: bold; cursor: pointer; color: #6b7280; display: flex; align-items: center; gap: 4px; transition: background 0.2s;" class="hover:bg-gray-100 dark:hover:bg-gray-700">
               🔊 Listen
             </button>
@@ -245,7 +250,6 @@
     });
   }
 
-  // NEW: Text-to-Speech Logic
   let isSpeaking = false;
   const ttsBtn = document.getElementById('tts-btn');
   if (ttsBtn) {
@@ -256,17 +260,13 @@
         ttsBtn.innerHTML = "🔊 Listen";
         return;
       }
-      
       const text = document.getElementById('anime-description').innerText;
       const utterance = new SpeechSynthesisUtterance(text);
-      // Optional: Set voice to English
       utterance.lang = 'en-US';
-      
       utterance.onend = function() {
         isSpeaking = false;
         ttsBtn.innerHTML = "🔊 Listen";
       };
-      
       window.speechSynthesis.speak(utterance);
       isSpeaking = true;
       ttsBtn.innerHTML = "⏹ Stop";
